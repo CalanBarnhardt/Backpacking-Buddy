@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "pangolin.backpackingbuddy"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "pangolin.backpackingbuddy"
