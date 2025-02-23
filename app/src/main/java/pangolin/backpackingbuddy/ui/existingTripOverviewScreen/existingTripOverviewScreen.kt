@@ -36,6 +36,7 @@ import pangolin.backpackingbuddy.ui.sharedComponents.AddButtonIcon
 import pangolin.backpackingbuddy.ui.sharedComponents.BulletPoint
 import pangolin.backpackingbuddy.ui.sharedComponents.ExpandableIcon
 import pangolin.backpackingbuddy.ui.sharedComponents.NavButton
+import pangolin.backpackingbuddy.ui.sharedComponents.TripNameDisplay
 
 @Composable
 fun ExistingTripOverviewScreen (trip : Trip) {
@@ -43,22 +44,7 @@ fun ExistingTripOverviewScreen (trip : Trip) {
         Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally)    {
         //trip title text header
-        Text (
-            text = trip.tripNameId,
-            fontSize = (24.sp),
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .drawBehind {
-                    val strokeWidth = 7f
-                    val y = size.height - strokeWidth
-                    drawLine(
-                        color = Color.Black,
-                        start = Offset(0f, y),
-                        end = Offset(size.width, y),
-                        strokeWidth = strokeWidth
-                    )
-                }
-        )
+        TripNameDisplay(trip.tripNameId)
 
         Spacer(modifier = Modifier.size(16.dp))
 
