@@ -10,7 +10,13 @@
     <string name="no_account">Don\'t have an account?</string>
     <string name="have_account">Already have an account?</string>
 
+    <string name="overview_button">Overview</string>
+    <string name="itinerary_button">Itinerary</string>
+    <string name="explore_button">Explore</string>
+
     <string name="new_trip">Create New Trip</string>
     <string name="created_trips">Created Trips</string>
+    <string name="trail_text">Trails</string>
+    <string name="campsite_text">Campsites</string>
 
 </resources>
