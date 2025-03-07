@@ -33,7 +33,7 @@ import pangolin.backpackingbuddy.ui.existingTripOverviewScreen.OverviewForEach
 
 
 @Composable
-fun ExisitngTripItinerary (trip : Trip) {
+fun ExisitngTripItinerary (trip : Trip, ) {
     Column (modifier = Modifier
         .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally) {
