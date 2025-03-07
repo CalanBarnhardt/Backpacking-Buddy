@@ -60,6 +60,7 @@ fun AddItemToTrip(trip: Trip, trail: Trail) {
 
             Spacer(modifier = Modifier.size(16.dp))
 
+            // choose dates from trip
             Text(text = "On:")
             var selectedDate by remember { mutableStateOf("") }
             OutlinedTextField(

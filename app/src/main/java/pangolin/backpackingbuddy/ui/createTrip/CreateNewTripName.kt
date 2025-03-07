@@ -30,6 +30,7 @@ fun CreateNewTripName() {
     ) {
         Text(text = "Name this trip", style = MaterialTheme.typography.titleLarge)
 
+        // display keyboard
         BasicTextField(
             value = inputText.value,
             onValueChange = { inputText.value = it },

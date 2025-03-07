@@ -51,7 +51,7 @@ fun NameThisTripScreen() {
         )
 
         Button(
-            onClick = { /* TODO: Get Started button click */ },
+            onClick = { /* TODO: Get Started button click action*/ },
             modifier = Modifier.padding(top = 16.dp)
         ) {
             Text(text = "Get Started")
