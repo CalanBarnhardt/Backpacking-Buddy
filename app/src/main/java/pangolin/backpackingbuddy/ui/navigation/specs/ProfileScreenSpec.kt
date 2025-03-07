@@ -28,4 +28,14 @@ data object ProfileScreenSpec : IScreenSpec{
     ) {
         ProfileScreen()
     }
+
+    @Composable
+    override fun BottomAppBarActions(
+        backpackingBuddyViewModel: BackpackingBuddyViewModel,
+        navController: NavHostController,
+        backStackEntry: NavBackStackEntry?,
+        context: Context
+    ) {
+        TODO("Not yet implemented")
+    }
 }

@@ -15,7 +15,7 @@ import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
 data object SignupScreenSpec : IScreenSpec{
     private const val LOG_TAG = "448.ProfileScreenSpec"
 
-    override val route = "profile"
+    override val route = "signup"
     override val title = R.string.app_name
     override val arguments: List<NamedNavArgument> = emptyList()
     override fun buildRoute(vararg args: String?) = route
@@ -29,5 +29,15 @@ data object SignupScreenSpec : IScreenSpec{
         context: Context
     ) {
         SignupScreen()
+    }
+
+    @Composable
+    override fun BottomAppBarActions(
+        backpackingBuddyViewModel: BackpackingBuddyViewModel,
+        navController: NavHostController,
+        backStackEntry: NavBackStackEntry?,
+        context: Context
+    ) {
+        TODO("Not yet implemented")
     }
 }

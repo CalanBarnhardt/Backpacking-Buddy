@@ -24,7 +24,7 @@ sealed interface IScreenSpec {
             it.objectInstance?.route to it.objectInstance
         }
         const val ROOT = "backpackingbuddy"
-        val startDestination = "" // TODO
+        val startDestination = LoginScreenSpec.route
 
         @Composable
         @JvmStatic

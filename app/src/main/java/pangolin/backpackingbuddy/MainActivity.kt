@@ -59,7 +59,7 @@ private fun MainActivityContent(
 @SuppressLint("ViewModelConstructorInComposable")
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun MainActivityPreview() {
     val viewModel = BackpackingBuddyViewModel()
     MainActivityContent(backpackingBuddyViewModel = viewModel)
 }
