@@ -3,10 +3,16 @@ package pangolin.backpackingbuddy.ui.navigation.specs
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavHostController
 import pangolin.backpackingbuddy.R
+import pangolin.backpackingbuddy.data.Trail
+import pangolin.backpackingbuddy.data.Trip
 import pangolin.backpackingbuddy.ui.exploreScreen.AddItemToTrip
 import pangolin.backpackingbuddy.ui.loginScreen.LoginScreen
 import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
+import java.util.UUID
 
 
 data object AddItemToTripSpec : IScreenSpec{
@@ -25,7 +31,25 @@ data object AddItemToTripSpec : IScreenSpec{
         navBackStackEntry: NavBackStackEntry,
         context: Context
     ) {
+        AddItemToTrip(Trip(
+            tripNameId = "",
+            trails = emptyList(),
+            campsites = emptyList(),
+        ), Trail(
+            name = "",
+            location = "",
+            photo = 1,
+            description = ""
+        ))
+    }
 
-        AddItemToTrip(// TODO: pass in vals)
+    @Composable
+    override fun BottomAppBarActions(
+        backpackingBuddyViewModel: BackpackingBuddyViewModel,
+        navController: NavHostController,
+        backStackEntry: NavBackStackEntry?,
+        context: Context
+    ) {
+        TODO("Not yet implemented")
     }
 }
