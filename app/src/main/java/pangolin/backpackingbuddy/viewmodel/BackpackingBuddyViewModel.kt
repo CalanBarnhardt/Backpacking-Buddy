@@ -10,17 +10,17 @@ import kotlinx.coroutines.flow.asStateFlow
 import pangolin.backpackingbuddy.data.Trip
 import java.util.UUID
 
-class BackpackingBuddyViewModel(): ViewModel() {
+class BackpackingBuddyViewModel(private val mTrips : List<Trip>): ViewModel() {
     companion object {
         private const val LOG_TAG = "448.BackpackingBuddyViewModel"
     }
-    private val mTrips = trips.toMutableStateList()
+//    private val mTrips = trips.toMutableStateList()
 
     /**
      * holds list of all characters stored within the view model
      */
     val trips: List<Trip>
-        get() = mTrips.toList()
+        get() = mTrips
 
     private val mCurrentTripState: MutableStateFlow<Trip?> = MutableStateFlow(null)
 

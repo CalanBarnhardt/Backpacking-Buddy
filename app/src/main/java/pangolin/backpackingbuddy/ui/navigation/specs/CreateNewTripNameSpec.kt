@@ -37,7 +37,5 @@ data object CreateNewTripNameSpec : IScreenSpec{
         navController: NavHostController,
         backStackEntry: NavBackStackEntry?,
         context: Context
-    ) {
-        TODO("Not yet implemented")
-    }
+    ) {}
 }

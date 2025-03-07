@@ -49,7 +49,5 @@ data object AddItemToTripSpec : IScreenSpec{
         navController: NavHostController,
         backStackEntry: NavBackStackEntry?,
         context: Context
-    ) {
-        TODO("Not yet implemented")
-    }
+    ) {}
 }
