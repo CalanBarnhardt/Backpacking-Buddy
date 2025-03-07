@@ -19,7 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 import java.util.*
 
 @Composable
-fun NameThisTripScreen() {
+fun CreateNewTripDate() {
     val startDate = remember { mutableStateOf(TextFieldValue()) }
     val endDate = remember { mutableStateOf(TextFieldValue()) }
     val context = LocalContext.current
@@ -109,5 +109,5 @@ fun showDatePicker(context: android.content.Context, onDateSelected: (String) ->
 @Preview
 @Composable
 fun PreviewNameThisTripScreen() {
-    NameThisTripScreen()
+    CreateNewTripDate()
 }

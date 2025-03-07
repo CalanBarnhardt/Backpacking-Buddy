@@ -1,5 +1,6 @@
 package pangolin.backpackingbuddy
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -7,41 +8,58 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import pangolin.backpackingbuddy.ui.navigation.BackpackingBuddyBottomBar
+import pangolin.backpackingbuddy.ui.navigation.BackpackingBuddyNavHost
 import pangolin.backpackingbuddy.ui.theme.BackpackingBuddyTheme
+import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val backpackingBuddyViewModel = BackpackingBuddyViewModel()
+
         setContent {
-            BackpackingBuddyTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+            MainActivityContent(backpackingBuddyViewModel = backpackingBuddyViewModel)
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+private fun MainActivityContent(
+    backpackingBuddyViewModel: BackpackingBuddyViewModel
+) {
+    val navController = rememberNavController()
+    val context = LocalContext.current
+
+    BackpackingBuddyTheme {
+        // A surface container using the 'background' color from the theme
+        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+            BackpackingBuddyNavHost(
+                modifier = Modifier.padding(innerPadding),
+                navController = navController,
+                backpackingBuddyViewModel = backpackingBuddyViewModel,
+                context = context
+            )
+            BackpackingBuddyBottomBar(
+                navController = navController,
+                backpackingBuddyViewModel = backpackingBuddyViewModel,
+                context = context
+            )
+        }
+    }
 }
 
+@SuppressLint("ViewModelConstructorInComposable")
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
-    BackpackingBuddyTheme {
-        Greeting("Android")
-    }
+fun MainActivityPreview() {
+    val viewModel = BackpackingBuddyViewModel()
+    MainActivityContent(backpackingBuddyViewModel = viewModel)
 }
