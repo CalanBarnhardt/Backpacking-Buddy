@@ -1,6 +1,10 @@
 package pangolin.backpackingbuddy.ui.navigation.specs
 
 import android.content.Context
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NamedNavArgument
@@ -36,6 +40,13 @@ data object ProfileScreenSpec : IScreenSpec{
         backStackEntry: NavBackStackEntry?,
         context: Context
     ) {
-        TODO("Not yet implemented")
+        IconButton(onClick = {
+            navController.navigate(ExploreScreenSpec.route)
+        }) {
+            Icon(
+                imageVector = Icons.Filled.ArrowDropDown,
+                contentDescription = "navigating"
+            )
+        }
     }
 }
