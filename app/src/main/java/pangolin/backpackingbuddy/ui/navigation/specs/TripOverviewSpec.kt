@@ -13,10 +13,12 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import pangolin.backpackingbuddy.R
 import pangolin.backpackingbuddy.ui.exisitngTripItinerary.ExisitngTripItinerary
+import pangolin.backpackingbuddy.ui.existingTripExplore.ExistingTripExploreScreen
+import pangolin.backpackingbuddy.ui.existingTripOverviewScreen.ExistingTripOverviewScreen
 import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
 import java.util.UUID
 
-data object TripItinerarySpec : IScreenSpec {
+data object TripOverviewSpec : IScreenSpec {
     override val arguments: List<NamedNavArgument> = emptyList()
 
     private const val ROUTE_BASE = "trip_itinerary"
@@ -57,7 +59,7 @@ data object TripItinerarySpec : IScreenSpec {
         val trip by backpackingBuddyViewModel.currentTripState.collectAsState()
 
         trip?.let {
-            ExisitngTripItinerary(
+            ExistingTripOverviewScreen(
                 trip = it
             )
         }
