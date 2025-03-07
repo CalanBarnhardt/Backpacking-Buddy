@@ -34,7 +34,11 @@ import pangolin.backpackingbuddy.ui.sharedComponents.SearchBar
 import pangolin.backpackingbuddy.ui.sharedComponents.TripNameDisplay
 
 @Composable
-fun ExistingTripExploreScreen(trip: Trip){
+fun ExistingTripExploreScreen(
+    trip: Trip,
+    onOverviewClick: (Trip) -> Unit,
+    onItineraryClick: (Trip) -> Unit){
+
     val searchResults = listOf(Trail("Island Lake", "Durango", R.drawable.islandlake ), Trail("Haviland Lake Trail", "Durango", R.drawable.havilandlake, "3.8 miles, Moderate"))
 
     Column (modifier = Modifier
@@ -51,8 +55,8 @@ fun ExistingTripExploreScreen(trip: Trip){
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
 
-            NavButton(stringResource(R.string.overview_button));
-            NavButton(stringResource(R.string.itinerary_button));
+            NavButton(stringResource(R.string.overview_button), onOverviewClick);
+            NavButton(stringResource(R.string.itinerary_button), onItineraryClick);
             NavButton(stringResource(R.string.explore_button));
         }
 
@@ -134,5 +138,5 @@ fun ExistingTripExploreScreen(trip: Trip){
 @Preview
 @Composable
 fun PreviewExisitingTripExploreScreen () {
-    ExistingTripExploreScreen(Trip("Durango", listOf("A", "B", "C"), listOf("A", "B", "C")))
+    ExistingTripExploreScreen(Trip("Durango", listOf("A", "B", "C"), listOf("A", "B", "C")), {}, {})
 }

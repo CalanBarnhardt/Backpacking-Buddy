@@ -58,7 +58,11 @@ data object TripItinerarySpec : IScreenSpec {
 
         trip?.let {
             ExisitngTripItinerary(
-                trip = it
+                trip = it,
+                onOverviewClick = { trip ->
+                    navController.navigate((TripOverviewSpec.buildRoute(trip.id.toString()))) },
+                onExploreClick = { trip ->
+                    navController.navigate((TripExploreSpec.buildRoute(trip.id.toString()))) }
             )
         }
     }

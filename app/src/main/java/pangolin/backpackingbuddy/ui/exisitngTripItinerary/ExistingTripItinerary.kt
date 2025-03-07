@@ -33,7 +33,10 @@ import pangolin.backpackingbuddy.ui.existingTripOverviewScreen.OverviewForEach
 
 
 @Composable
-fun ExisitngTripItinerary (trip : Trip, ) {
+fun ExisitngTripItinerary (
+    trip : Trip,
+    onOverviewClick: (Trip) -> Unit,
+    onExploreClick: (Trip) -> Unit ) {
     Column (modifier = Modifier
         .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally) {
@@ -48,8 +51,8 @@ fun ExisitngTripItinerary (trip : Trip, ) {
 
         // button display
         Row {
-            NavButton(stringResource(R.string.overview_button))
-            NavButton(stringResource(R.string.explore_button))
+            NavButton(stringResource(R.string.overview_button), onOverviewClick)
+            NavButton(stringResource(R.string.explore_button), onExploreClick)
             NavButton(stringResource(R.string.itinerary_button))
         }
         Spacer(modifier = Modifier.size(16.dp))
@@ -89,6 +92,6 @@ fun ExisitngTripItinerary (trip : Trip, ) {
 @Preview
 @Composable
 fun previewExistingTripItinerary(){
-    ExisitngTripItinerary(Trip("Durango", listOf("A", "B", "C"), listOf("A", "B", "C")))
+    ExisitngTripItinerary(Trip("Durango", listOf("A", "B", "C"), listOf("A", "B", "C")), {}, {})
 
 }

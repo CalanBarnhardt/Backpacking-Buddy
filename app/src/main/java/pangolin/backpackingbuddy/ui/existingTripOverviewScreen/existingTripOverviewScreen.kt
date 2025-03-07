@@ -39,7 +39,10 @@ import pangolin.backpackingbuddy.ui.sharedComponents.NavButton
 import pangolin.backpackingbuddy.ui.sharedComponents.TripNameDisplay
 
 @Composable
-fun ExistingTripOverviewScreen (trip : Trip) {
+fun ExistingTripOverviewScreen (
+    trip : Trip,
+    onExploreClick: (Trip) -> Unit,
+    onItineraryClick: (Trip) -> Unit) {
     Column (modifier=
         Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally)    {
@@ -54,8 +57,8 @@ fun ExistingTripOverviewScreen (trip : Trip) {
             horizontalArrangement = Arrangement.SpaceEvenly) {
 
             NavButton(stringResource(R.string.overview_button));
-            NavButton(stringResource(R.string.itinerary_button));
-            NavButton(stringResource(R.string.explore_button));
+            NavButton(stringResource(R.string.itinerary_button), onItineraryClick);
+            NavButton(stringResource(R.string.explore_button), onExploreClick);
         }
 
         Spacer(modifier = Modifier.size(16.dp))
@@ -106,5 +109,5 @@ fun ExistingTripOverviewScreen (trip : Trip) {
 @Preview
 @Composable
 fun PreviewExistingTripOverviewScreen () {
-    ExistingTripOverviewScreen(Trip("Durango", listOf("A", "B", "C"), listOf("A", "B", "C")))
+    //ExistingTripOverviewScreen(Trip("Durango", listOf("A", "B", "C"), listOf("A", "B", "C")))
 }

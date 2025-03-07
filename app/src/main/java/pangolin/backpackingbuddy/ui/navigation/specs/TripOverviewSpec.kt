@@ -60,7 +60,11 @@ data object TripOverviewSpec : IScreenSpec {
 
         trip?.let {
             ExistingTripOverviewScreen(
-                trip = it
+                trip = it,
+                onItineraryClick = { trip ->
+                    navController.navigate((TripOverviewSpec.buildRoute(trip.id.toString()))) },
+                onExploreClick = { trip ->
+                    navController.navigate((TripExploreSpec.buildRoute(trip.id.toString()))) }
             )
         }
     }

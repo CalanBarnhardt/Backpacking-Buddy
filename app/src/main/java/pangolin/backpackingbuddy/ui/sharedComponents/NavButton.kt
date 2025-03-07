@@ -7,11 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import pangolin.backpackingbuddy.R
+import pangolin.backpackingbuddy.data.Trip
 import pangolin.backpackingbuddy.ui.theme.BackpackingBuddyTheme
 
 @Composable
-fun NavButton(buttonText : String ) {
-    Button(onClick = {}, colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+fun NavButton(buttonText : String , onClick: (Trip) -> Unit = {}) {
+    Button(onClick = { onClick }, colors = androidx.compose.material3.ButtonDefaults.buttonColors(
         containerColor = MaterialTheme.colorScheme.primary,
         contentColor = MaterialTheme.colorScheme.onPrimary
     )
