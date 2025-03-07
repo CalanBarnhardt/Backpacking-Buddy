@@ -3,6 +3,9 @@ package pangolin.backpackingbuddy.ui.navigation.specs
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavHostController
 import pangolin.backpackingbuddy.R
 import pangolin.backpackingbuddy.ui.createTrip.CreateNewTripName
 import pangolin.backpackingbuddy.ui.loginScreen.LoginScreen
@@ -27,4 +30,12 @@ data object CreateNewTripNameSpec : IScreenSpec{
     ) {
         CreateNewTripName()
     }
+
+    @Composable
+    override fun BottomAppBarActions(
+        backpackingBuddyViewModel: BackpackingBuddyViewModel,
+        navController: NavHostController,
+        backStackEntry: NavBackStackEntry?,
+        context: Context
+    ) {}
 }

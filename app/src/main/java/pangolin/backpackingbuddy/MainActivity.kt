@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import pangolin.backpackingbuddy.data.TripsRepo
 import pangolin.backpackingbuddy.ui.navigation.BackpackingBuddyBottomBar
 import pangolin.backpackingbuddy.ui.navigation.BackpackingBuddyNavHost
 import pangolin.backpackingbuddy.ui.theme.BackpackingBuddyTheme
@@ -23,7 +24,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val backpackingBuddyViewModel = BackpackingBuddyViewModel()
+        val backpackingBuddyViewModel = BackpackingBuddyViewModel(TripsRepo.trip)
 
         setContent {
             MainActivityContent(backpackingBuddyViewModel = backpackingBuddyViewModel)
@@ -60,6 +61,6 @@ private fun MainActivityContent(
 @Preview(showBackground = true)
 @Composable
 fun MainActivityPreview() {
-    val viewModel = BackpackingBuddyViewModel()
+    val viewModel = BackpackingBuddyViewModel(TripsRepo.trip)
     MainActivityContent(backpackingBuddyViewModel = viewModel)
 }
