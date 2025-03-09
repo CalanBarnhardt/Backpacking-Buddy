@@ -2,6 +2,8 @@ package pangolin.backpackingbuddy.ui.navigation.specs
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
@@ -14,6 +16,11 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material.icons.filled.ArrowBack
+
 
 sealed interface IScreenSpec {
     companion object {
@@ -49,19 +56,11 @@ sealed interface IScreenSpec {
         context: Context
     )
 
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun BottomAppBarContent(backpackingBuddyViewModel: BackpackingBuddyViewModel, navController: NavHostController,
                                  backStackEntry: NavBackStackEntry?, context: Context) {
         BottomAppBar(
-            floatingActionButton = {
-                IconButton(onClick = { navController.navigateUp() }) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "description"
-                    )
-                }
-            },
+            modifier = Modifier.height(80.dp),
             actions = {
                 BottomAppBarActions(
                     backpackingBuddyViewModel = backpackingBuddyViewModel,
@@ -69,6 +68,14 @@ sealed interface IScreenSpec {
                     backStackEntry = backStackEntry,
                     context = context
                 )
+            },
+            floatingActionButton = {
+                IconButton(onClick = { navController.navigateUp() }) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "go back"
+                    )
+                }
             }
         )
 

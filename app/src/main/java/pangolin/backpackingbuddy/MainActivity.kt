@@ -14,8 +14,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import pangolin.backpackingbuddy.data.TripsRepo
-import pangolin.backpackingbuddy.ui.navigation.BackpackingBuddyBottomBar
 import pangolin.backpackingbuddy.ui.navigation.BackpackingBuddyNavHost
+import pangolin.backpackingbuddy.ui.navigation.BottomAppBar
 import pangolin.backpackingbuddy.ui.theme.BackpackingBuddyTheme
 import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
 
@@ -41,14 +41,18 @@ private fun MainActivityContent(
 
     BackpackingBuddyTheme {
         // A surface container using the 'background' color from the theme
-        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            bottomBar = {
+                BottomAppBar(
+                    navController = navController,
+                    backpackingBuddyViewModel = backpackingBuddyViewModel,
+                    context = context
+                )
+            }
+        ) { innerPadding ->
             BackpackingBuddyNavHost(
                 modifier = Modifier.padding(innerPadding),
-                navController = navController,
-                backpackingBuddyViewModel = backpackingBuddyViewModel,
-                context = context
-            )
-            BackpackingBuddyBottomBar(
                 navController = navController,
                 backpackingBuddyViewModel = backpackingBuddyViewModel,
                 context = context

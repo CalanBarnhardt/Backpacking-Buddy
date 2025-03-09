@@ -9,7 +9,7 @@ import pangolin.backpackingbuddy.ui.navigation.specs.IScreenSpec
 import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
 
 @Composable
-fun BackpackingBuddyBottomBar(navController: NavHostController, backpackingBuddyViewModel: BackpackingBuddyViewModel, context: Context) {
+fun BottomAppBar(navController: NavHostController, backpackingBuddyViewModel: BackpackingBuddyViewModel, context: Context) {
     val navBackStackEntryState = navController.currentBackStackEntryAsState()
     IScreenSpec.BottomBar(
         backpackingBuddyViewModel = backpackingBuddyViewModel,
