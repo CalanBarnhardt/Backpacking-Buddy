@@ -25,7 +25,7 @@ import pangolin.backpackingbuddy.R
 import pangolin.backpackingbuddy.ui.sharedComponents.IconHeaderButton
 
 @Composable
-fun SignupScreen(){
+fun SignupScreen(onSignup: () -> Unit, onLogin: () -> Unit){
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -40,7 +40,7 @@ fun SignupScreen(){
         IconHeaderButton(R.string.password, R.string.type_password, Icons.Filled.Lock)
 
         Spacer(modifier = Modifier.size(20.dp))
-        Button(onClick = {}) {
+        Button(onClick = { onSignup() }) {
             Text(stringResource(R.string.signup))
         }
 
@@ -54,7 +54,7 @@ fun SignupScreen(){
                     stringResource(R.string.have_account),
                     modifier = Modifier.width(80.dp)
                 )
-                Button(onClick = {}) {
+                Button(onClick = { onLogin() }) {
                     Text(stringResource(R.string.login))
                 }
             }
@@ -65,5 +65,5 @@ fun SignupScreen(){
 @Preview(device = "spec:width=411dp,height=891dp")
 @Composable
 fun PreviewSignupScreen() {
-    SignupScreen()
+    SignupScreen({}, {})
 }
