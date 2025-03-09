@@ -1,12 +1,15 @@
 package pangolin.backpackingbuddy.ui.createTrip
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CreateNewTripName() {
+fun CreateNewTripName(onClick : () -> Unit) {
     val inputText = remember { androidx.compose.runtime.mutableStateOf(TextFieldValue()) }
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -28,6 +31,7 @@ fun CreateNewTripName() {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxWidth()
     ) {
+        Spacer(modifier = Modifier.size(55.dp))
         Text(text = "Name this trip", style = MaterialTheme.typography.titleLarge)
 
         // display keyboard
@@ -45,11 +49,18 @@ fun CreateNewTripName() {
                 onDone = { keyboardController?.hide() }
             )
         )
+
+        Button(
+            onClick = { onClick() },
+            modifier = Modifier.padding(top = 16.dp)
+        ) {
+            Text(text = "Next")
+        }
     }
 }
 
 @Preview
 @Composable
 fun PreviewCreateNewTripName() {
-    CreateNewTripName()
+    CreateNewTripName({})
 }

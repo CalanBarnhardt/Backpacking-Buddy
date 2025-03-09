@@ -41,6 +41,7 @@ fun ExisitngTripItinerary (
         .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally) {
 
+        Spacer(modifier = Modifier.size(55.dp))
         // trip name display
         TripNameDisplay(trip.tripNameId)
         Spacer(modifier = Modifier.size(16.dp))
@@ -51,9 +52,10 @@ fun ExisitngTripItinerary (
 
         // button display
         Row {
-            NavButton(stringResource(R.string.overview_button), onOverviewClick)
-            NavButton(stringResource(R.string.explore_button), onExploreClick)
-            NavButton(stringResource(R.string.itinerary_button))
+            NavButton(stringResource(R.string.overview_button), trip, onOverviewClick)
+            NavButton(stringResource(R.string.itinerary_button), trip)
+            NavButton(stringResource(R.string.explore_button), trip, onExploreClick)
+
         }
         Spacer(modifier = Modifier.size(16.dp))
         Box (modifier = Modifier

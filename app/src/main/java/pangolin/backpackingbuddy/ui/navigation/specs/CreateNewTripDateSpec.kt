@@ -28,7 +28,9 @@ data object CreateNewTripDateSpec : IScreenSpec{
         navBackStackEntry: NavBackStackEntry,
         context: Context
     ) {
-        CreateNewTripDate()
+        CreateNewTripDate(onGetStarted = { trip ->
+            navController.navigate((TripOverviewSpec.buildRoute(trip.id.toString())))
+        })
     }
 
     @Composable

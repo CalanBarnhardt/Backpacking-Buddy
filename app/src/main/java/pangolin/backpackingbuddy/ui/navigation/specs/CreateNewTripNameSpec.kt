@@ -1,6 +1,7 @@
 package pangolin.backpackingbuddy.ui.navigation.specs
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NamedNavArgument
@@ -28,7 +29,7 @@ data object CreateNewTripNameSpec : IScreenSpec{
         navBackStackEntry: NavBackStackEntry,
         context: Context
     ) {
-        CreateNewTripName()
+        CreateNewTripName(onClick = {navController.navigate("trip-date")})
     }
 
     @Composable

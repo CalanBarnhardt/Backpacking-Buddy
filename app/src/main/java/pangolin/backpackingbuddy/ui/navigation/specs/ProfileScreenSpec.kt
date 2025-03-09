@@ -30,7 +30,11 @@ data object ProfileScreenSpec : IScreenSpec{
         navBackStackEntry: NavBackStackEntry,
         context: Context
     ) {
-        ProfileScreen()
+        ProfileScreen(
+            onCreateTrip = { navController.navigate("trip-name")},
+            onExistingTrip = { trip ->
+                navController.navigate((TripOverviewSpec.buildRoute(trip.id.toString()))) },
+            onSignout = { navController.navigate("login")})
     }
 
     @Composable
@@ -40,13 +44,13 @@ data object ProfileScreenSpec : IScreenSpec{
         backStackEntry: NavBackStackEntry?,
         context: Context
     ) {
-        IconButton(onClick = {
-            navController.navigate(ExploreScreenSpec.route)
-        }) {
-            Icon(
-                imageVector = Icons.Filled.ArrowDropDown,
-                contentDescription = "navigating"
-            )
-        }
+//        IconButton(onClick = {
+//            navController.navigate(ExploreScreenSpec.route)
+//        }) {
+//            Icon(
+//                imageVector = Icons.Filled.ArrowDropDown,
+//                contentDescription = "navigating"
+//            )
+//        }
     }
 }

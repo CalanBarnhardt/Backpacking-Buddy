@@ -1,5 +1,6 @@
 package pangolin.backpackingbuddy.ui.existingTripOverviewScreen
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,9 +44,12 @@ fun ExistingTripOverviewScreen (
     trip : Trip,
     onExploreClick: (Trip) -> Unit,
     onItineraryClick: (Trip) -> Unit) {
+    Log.d("TripOverviewScreen", "Showing trip with ID: $trip.tripId")
     Column (modifier=
         Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally)    {
+        Spacer(modifier = Modifier.size(60.dp))
+
         //trip title text header
         TripNameDisplay(trip.tripNameId)
 
@@ -56,9 +60,9 @@ fun ExistingTripOverviewScreen (
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly) {
 
-            NavButton(stringResource(R.string.overview_button));
-            NavButton(stringResource(R.string.itinerary_button), onItineraryClick);
-            NavButton(stringResource(R.string.explore_button), onExploreClick);
+            NavButton(stringResource(R.string.overview_button), trip);
+            NavButton(stringResource(R.string.itinerary_button), trip, onItineraryClick);
+            NavButton(stringResource(R.string.explore_button), trip, onExploreClick);
         }
 
         Spacer(modifier = Modifier.size(16.dp))
@@ -109,5 +113,5 @@ fun ExistingTripOverviewScreen (
 @Preview
 @Composable
 fun PreviewExistingTripOverviewScreen () {
-    //ExistingTripOverviewScreen(Trip("Durango", listOf("A", "B", "C"), listOf("A", "B", "C")))
+    ExistingTripOverviewScreen(Trip("Durango", listOf("A", "B", "C"), listOf("A", "B", "C")), {}, {})
 }

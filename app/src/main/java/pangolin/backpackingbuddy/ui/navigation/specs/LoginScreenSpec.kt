@@ -1,6 +1,7 @@
 package pangolin.backpackingbuddy.ui.navigation.specs
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NamedNavArgument
@@ -27,7 +28,14 @@ data object LoginScreenSpec : IScreenSpec{
         navBackStackEntry: NavBackStackEntry,
         context: Context
     ) {
-        LoginScreen()
+        LoginScreen(
+            onLogin = {
+                Log.d("Navigation", "Navigating to profile...")
+
+                navController.navigate("profile")},
+            onSignup = {
+                Log.d("Navigation", "Navigating to signup...")
+                navController.navigate("signup")})
     }
 
     @Composable

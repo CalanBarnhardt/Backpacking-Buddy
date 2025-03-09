@@ -2,6 +2,10 @@ package pangolin.backpackingbuddy.ui.navigation.specs
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -21,7 +25,7 @@ import java.util.UUID
 data object TripOverviewSpec : IScreenSpec {
     override val arguments: List<NamedNavArgument> = emptyList()
 
-    private const val ROUTE_BASE = "trip_itinerary"
+    private const val ROUTE_BASE = "trip_overview"
     private const val ARG_UUID_NAME = "uuid"
 
     private fun buildFullRoute(argVal: String): String {
@@ -62,7 +66,7 @@ data object TripOverviewSpec : IScreenSpec {
             ExistingTripOverviewScreen(
                 trip = it,
                 onItineraryClick = { trip ->
-                    navController.navigate((TripOverviewSpec.buildRoute(trip.id.toString()))) },
+                    navController.navigate((TripItinerarySpec.buildRoute(trip.id.toString()))) },
                 onExploreClick = { trip ->
                     navController.navigate((TripExploreSpec.buildRoute(trip.id.toString()))) }
             )
@@ -75,6 +79,15 @@ data object TripOverviewSpec : IScreenSpec {
         navController: NavHostController,
         backStackEntry: NavBackStackEntry?,
         context: Context
-    ) { /*not implemented*/ }
+    ) {
+        IconButton(onClick = {
+            navController.navigate("profile")
+        }) {
+            Icon(
+                imageVector = Icons.Filled.ArrowDropDown,
+                contentDescription = "navigating"
+            )
+         }
 
-}
+        }
+    }

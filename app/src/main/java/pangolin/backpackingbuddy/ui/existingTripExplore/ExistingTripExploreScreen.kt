@@ -44,6 +44,7 @@ fun ExistingTripExploreScreen(
     Column (modifier = Modifier
         .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally){
+        Spacer(modifier = Modifier.size(55.dp))
         // trip name display
         TripNameDisplay(trip.tripNameId)
 
@@ -55,9 +56,9 @@ fun ExistingTripExploreScreen(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
 
-            NavButton(stringResource(R.string.overview_button), onOverviewClick);
-            NavButton(stringResource(R.string.itinerary_button), onItineraryClick);
-            NavButton(stringResource(R.string.explore_button));
+            NavButton(stringResource(R.string.overview_button), trip, onOverviewClick);
+            NavButton(stringResource(R.string.itinerary_button), trip, onItineraryClick);
+            NavButton(stringResource(R.string.explore_button), trip);
         }
 
         // search bar

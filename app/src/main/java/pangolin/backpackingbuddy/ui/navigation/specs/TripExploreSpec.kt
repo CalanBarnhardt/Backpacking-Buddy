@@ -20,7 +20,7 @@ import java.util.UUID
 data object TripExploreSpec : IScreenSpec {
     override val arguments: List<NamedNavArgument> = emptyList()
 
-    private const val ROUTE_BASE = "trip_itinerary"
+    private const val ROUTE_BASE = "trip_explore"
     private const val ARG_UUID_NAME = "uuid"
 
     private fun buildFullRoute(argVal: String): String {

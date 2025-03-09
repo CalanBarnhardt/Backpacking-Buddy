@@ -24,10 +24,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import pangolin.backpackingbuddy.R
+import pangolin.backpackingbuddy.data.Trip
 import pangolin.backpackingbuddy.data.TripsRepo
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(onCreateTrip: () -> Unit, onExistingTrip: (Trip) -> Unit, onSignout: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -48,7 +49,8 @@ fun ProfileScreen() {
             )
             Spacer(modifier = Modifier.weight(0.9f))
 
-            Button(onClick = {}) {
+            // signout button
+            Button(onClick = { onSignout() }) {
                 Text(stringResource(R.string.signout))
             }
             Spacer(modifier = Modifier.weight(0.05f))
@@ -56,7 +58,8 @@ fun ProfileScreen() {
 
         Spacer(modifier = Modifier.size(40.dp))
 
-        Button(onClick = {}) {
+        // create a new trip button
+        Button(onClick = { onCreateTrip() }) {
             Text(stringResource(R.string.new_trip))
         }
         Spacer(modifier = Modifier.size(10.dp))
@@ -73,9 +76,10 @@ fun ProfileScreen() {
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            items(TripsRepo.trips) { trip ->
-                Button(onClick = {}) {
-                    Text(trip)
+            items(TripsRepo.trip) { trip ->
+                Spacer(modifier = Modifier.size(15.dp))
+                Button(onClick = { onExistingTrip(trip) }) {
+                    Text(trip.tripNameId)
                 }
             }
         }
@@ -86,5 +90,5 @@ fun ProfileScreen() {
 @Preview
 @Composable
 fun PreviewProfileScreen() {
-    ProfileScreen()
+    ProfileScreen({}, {}, {})
 }
