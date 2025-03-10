@@ -20,11 +20,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import pangolin.backpackingbuddy.R
 import pangolin.backpackingbuddy.data.Trip
+import pangolin.backpackingbuddy.ui.sharedComponents.NavButton
 import java.util.*
 
 @Composable
-fun CreateNewTripDate(onGetStarted: (Trip) -> Unit) {
+fun CreateNewTripDate(trip: Trip, onGetStarted: (Trip) -> Unit) {
     val startDate = remember { mutableStateOf(TextFieldValue()) }
     val endDate = remember { mutableStateOf(TextFieldValue()) }
     val context = LocalContext.current
@@ -58,14 +61,7 @@ fun CreateNewTripDate(onGetStarted: (Trip) -> Unit) {
             }
         )
 
-        Button(
-            onClick = {
-                Toast.makeText(context, "Your trip has been created", Toast.LENGTH_SHORT).show()
-                      },
-            modifier = Modifier.padding(top = 16.dp)
-        ) {
-            Text(text = "Get Started")
-        }
+        NavButton(stringResource(id = R.string.get_started), trip, onGetStarted)
     }
 }
 
@@ -121,5 +117,5 @@ fun showDatePicker(context: android.content.Context, onDateSelected: (String) ->
 @Preview
 @Composable
 fun PreviewNameThisTripScreen() {
-    CreateNewTripDate({})
+    CreateNewTripDate(Trip("Durango", listOf("A", "B", "C"), listOf("A", "B", "C")), {})
 }

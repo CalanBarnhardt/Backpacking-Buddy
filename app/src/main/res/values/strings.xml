@@ -9,6 +9,7 @@
     <string name="type_password">Type in password</string>
     <string name="no_account">Don\'t have an account?</string>
     <string name="have_account">Already have an account?</string>
+    <string name="get_started">Get Started</string>
 
     <string name="overview_button">Overview</string>
     <string name="itinerary_button">Itinerary</string>
