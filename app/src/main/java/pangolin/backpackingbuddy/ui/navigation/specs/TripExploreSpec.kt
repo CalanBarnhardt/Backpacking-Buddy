@@ -1,19 +1,16 @@
 package pangolin.backpackingbuddy.ui.navigation.specs
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.core.content.PackageManagerCompat.LOG_TAG
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import pangolin.backpackingbuddy.R
-import pangolin.backpackingbuddy.ui.exisitngTripItinerary.ExisitngTripItinerary
-import pangolin.backpackingbuddy.ui.existingTripExplore.ExistingTripExploreScreen
+import pangolin.backpackingbuddy.ui.tripExplore.ExistingTripExploreScreen
 import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
 import java.util.UUID
 

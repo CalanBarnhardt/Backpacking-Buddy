@@ -1,4 +1,4 @@
-package pangolin.backpackingbuddy.ui.exisitngTripItinerary
+package pangolin.backpackingbuddy.ui.tripItinerary
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,11 +27,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import pangolin.backpackingbuddy.ui.existingTripExplore.ExistingTripExploreScreen
-import pangolin.backpackingbuddy.ui.existingTripOverviewScreen.OverviewDropdown
-import pangolin.backpackingbuddy.ui.existingTripOverviewScreen.OverviewForEach
 
 
 @Composable
@@ -48,24 +46,38 @@ fun ExisitngTripItinerary (
         TripNameDisplay(trip.tripNameId)
         Spacer(modifier = Modifier.size(16.dp))
 
-        // map display
-        Text (text = "Map Here")
-        Spacer(modifier = Modifier.size(16.dp))
-
         // button display
         Row (modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly) {
             NavButton(stringResource(R.string.overview_button), trip, onOverviewClick)
-            NavButton(stringResource(R.string.itinerary_button), trip)
+            NavButton(stringResource(R.string.itinerary_button), trip, {}, true)
             NavButton(stringResource(R.string.explore_button), trip, onExploreClick)
 
         }
+        Spacer(modifier = Modifier.size(16.dp))
+
+        // map display
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .height(200.dp)
+                .background(MaterialTheme.colorScheme.tertiary),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "Map",
+                textAlign = TextAlign.Center
+            )
+        }
+        Spacer(modifier = Modifier.size(16.dp))
+
+        // dates display
         Spacer(modifier = Modifier.size(16.dp))
         Box (modifier = Modifier
             .fillMaxWidth(0.9f)
             .height(300.dp)
             .clip(RoundedCornerShape(12.dp))
-            .background(MaterialTheme.colorScheme.background))
+            .background(MaterialTheme.colorScheme.surface))
         {
             val accessingDate = remember { mutableStateOf<String>("6/28") }
             val dates = listOf("6/28", "6/29", "6/30")

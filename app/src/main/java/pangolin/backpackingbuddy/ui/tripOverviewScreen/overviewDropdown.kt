@@ -1,4 +1,4 @@
-package pangolin.backpackingbuddy.ui.existingTripOverviewScreen
+package pangolin.backpackingbuddy.ui.tripOverviewScreen
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -6,9 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import pangolin.backpackingbuddy.R
 import pangolin.backpackingbuddy.data.Trip
 import pangolin.backpackingbuddy.ui.sharedComponents.BulletPoint
 import pangolin.backpackingbuddy.ui.sharedComponents.ExpandableIcon
