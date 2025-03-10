@@ -1,7 +1,10 @@
 package pangolin.backpackingbuddy.ui.navigation.specs
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
@@ -28,9 +31,14 @@ data object CreateNewTripDateSpec : IScreenSpec{
         navBackStackEntry: NavBackStackEntry,
         context: Context
     ) {
-        CreateNewTripDate(onGetStarted = { trip ->
-            navController.navigate((TripOverviewSpec.buildRoute(trip.id.toString())))
-        })
+        val trip by backpackingBuddyViewModel.currentTripState.collectAsState()
+
+        trip?.let {
+            CreateNewTripDate(it, onGetStarted = { trip ->
+                navController.navigate(ProfileScreenSpec.route)
+                Toast.makeText(context, "Your trip has been added!", Toast.LENGTH_SHORT).show()
+            })
+        }
     }
 
     @Composable
