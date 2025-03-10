@@ -75,7 +75,10 @@ data object TripOverviewSpec : IScreenSpec {
                 onItineraryClick = { trip ->
                     navController.navigate((TripItinerarySpec.buildRoute(trip.id.toString()))) },
                 onExploreClick = { trip ->
-                    navController.navigate((TripExploreSpec.buildRoute(trip.id.toString()))) }
+                    navController.navigate((TripExploreSpec.buildRoute(trip.id.toString()))) },
+                onAddButtonClick = {
+                    navController.navigate(ExploreScreenSpec.route)
+                }
             )
         }
     }

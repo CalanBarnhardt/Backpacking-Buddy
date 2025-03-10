@@ -1,7 +1,11 @@
 package pangolin.backpackingbuddy.ui.navigation.specs
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
@@ -13,6 +17,8 @@ import pangolin.backpackingbuddy.ui.exploreScreen.AddItemToTrip
 import pangolin.backpackingbuddy.ui.loginScreen.LoginScreen
 import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
 import java.util.UUID
+import androidx.compose.ui.res.painterResource
+import androidx.compose.foundation.Image
 
 
 data object AddItemToTripSpec : IScreenSpec{
@@ -31,16 +37,18 @@ data object AddItemToTripSpec : IScreenSpec{
         navBackStackEntry: NavBackStackEntry,
         context: Context
     ) {
-        AddItemToTrip(Trip(
-            tripNameId = "",
-            trails = emptyList(),
-            campsites = emptyList(),
-        ), Trail(
-            name = "",
-            location = "",
-            photo = 1,
-            description = ""
-        ))
+        val trip by backpackingBuddyViewModel.currentTripState.collectAsState()
+
+        trip?.let { AddItemToTrip(it,
+            Trail("Haviland Lake Trail",
+                "Durango",
+                R.drawable.havilandlake,
+                "3.8 miles, Moderate"),
+            onAddNewItemClick = { trip ->
+                Toast.makeText(context, "'Haviland Lake Trail' has been added to your trip!", Toast.LENGTH_SHORT).show()
+                navController.navigate((TripOverviewSpec.buildRoute(trip.id.toString())))
+            }) }
+
     }
 
     @Composable

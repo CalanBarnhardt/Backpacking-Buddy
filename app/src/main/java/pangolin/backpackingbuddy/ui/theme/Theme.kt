@@ -11,32 +11,41 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
-private val DarkColorScheme = darkColorScheme(
-    primary = MainGreen,
-    secondary = Teal,
-    tertiary = LightGreen
+private val LightColorScheme = lightColorScheme(
+    primary = MediumForestGreen, // Main green
+    secondary = LightForestGreen, // Secondary green
+    tertiary = LightGray, // Light gray for accents
+    background = VeryLightGray, // Very light background
+    surface = VeryLightGreen, // Light surfaces
+    onPrimary = VeryLightGray, // Light text on green
+    onSecondary = DarkGray, // Dark text on light green
+    onTertiary = DarkGray, // Dark text on light gray
+    onBackground = DarkGray, // Dark text on light background
+    onSurface = DarkGray, // Dark text on light surfaces
+    // Add button color specific roles here
+    primaryContainer = DarkForestGreen, // Color of button background
+    onPrimaryContainer = VeryLightGray // Color of text on button
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = MainGreen,
-    secondary = Teal,
-    tertiary = LightGreen
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+private val DarkColorScheme = darkColorScheme(
+    primary = MediumForestGreen, // Main green
+    secondary = LightForestGreen, // Secondary green
+    tertiary = DarkGray, // Dark gray for accents
+    background = DarkGray, // Dark background
+    surface = DarkForestGreen, // Darker surfaces
+    onPrimary = VeryLightGray, // Light text on green
+    onSecondary = DarkGray, // Dark text on light green
+    onTertiary = VeryLightGray, // Light text on dark gray
+    onBackground = VeryLightGray, // Light text on dark background
+    onSurface = VeryLightGray, // Light text on dark surfaces
+    // Add button color specific roles here
+    primaryContainer = DarkForestGreen, // Color of button background
+    onPrimaryContainer = VeryLightGray // Color of text on button
 )
 
 @Composable
 fun BackpackingBuddyTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {

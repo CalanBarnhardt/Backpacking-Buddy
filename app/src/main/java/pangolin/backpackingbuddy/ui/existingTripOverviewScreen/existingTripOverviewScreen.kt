@@ -43,7 +43,8 @@ import pangolin.backpackingbuddy.ui.sharedComponents.TripNameDisplay
 fun ExistingTripOverviewScreen (
     trip : Trip,
     onExploreClick: (Trip) -> Unit,
-    onItineraryClick: (Trip) -> Unit) {
+    onItineraryClick: (Trip) -> Unit,
+    onAddButtonClick: () -> Unit) {
     Log.d("TripOverviewScreen", "Showing trip with ID: $trip.tripId")
     Column (modifier=
         Modifier.fillMaxWidth(),
@@ -104,7 +105,7 @@ fun ExistingTripOverviewScreen (
             Row (modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(5.dp)) {
-                AddButtonIcon()
+                AddButtonIcon(onAddButtonClick)
             }
         }
     }
@@ -113,5 +114,5 @@ fun ExistingTripOverviewScreen (
 @Preview
 @Composable
 fun PreviewExistingTripOverviewScreen () {
-    ExistingTripOverviewScreen(Trip("Durango", listOf("A", "B", "C"), listOf("A", "B", "C")), {}, {})
+    ExistingTripOverviewScreen(Trip("Durango", listOf("A", "B", "C"), listOf("A", "B", "C")), {}, {}, {})
 }

@@ -2,10 +2,14 @@ package pangolin.backpackingbuddy.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val MainGreen = Color(0xFF5D9B39)
-val Teal = Color(0xFF84CDBE)
-val LightGreen = Color(0xFF144318)
+// Greens
+val DarkForestGreen = Color(0xFF344e41) // Deep forest green
+val MediumForestGreen = Color(0xFF3a5a40) // Medium green
+val LightForestGreen = Color(0xFF588157) // Light green
+val VeryLightGreen = Color(0xFFa3b18a) // Very light green
 
-//val Purple40 = Color(0xFF6650a4)
-//val PurpleGrey40 = Color(0xFF625b71)
-//val Pink40 = Color(0xFF7D5260)
+// Grays
+val DarkGray = Color(0xFF333333) // Dark gray
+val MediumGray = Color(0xFF888888) // Medium gray
+val LightGray = Color(0xFFEEEEEE) // Light gray
+val VeryLightGray = Color(0xFFdad7cd) // Very light gray

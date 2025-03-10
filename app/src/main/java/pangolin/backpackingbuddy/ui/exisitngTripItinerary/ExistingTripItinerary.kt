@@ -1,6 +1,7 @@
 package pangolin.backpackingbuddy.ui.exisitngTripItinerary
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -47,11 +49,12 @@ fun ExisitngTripItinerary (
         Spacer(modifier = Modifier.size(16.dp))
 
         // map display
-        Text (text = "Insert Map Here")
+        Text (text = "Map Here")
         Spacer(modifier = Modifier.size(16.dp))
 
         // button display
-        Row {
+        Row (modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly) {
             NavButton(stringResource(R.string.overview_button), trip, onOverviewClick)
             NavButton(stringResource(R.string.itinerary_button), trip)
             NavButton(stringResource(R.string.explore_button), trip, onExploreClick)
@@ -73,16 +76,23 @@ fun ExisitngTripItinerary (
             ) {
                 item {
                     Column {
+                        Text(text = "Trip Dates:")
+                        Spacer(modifier = Modifier.size(8.dp))
                         //list dates
                         Row (modifier = Modifier
                             .fillMaxWidth()
                             .padding(end = 5.dp))   {
-                            dates.forEach { date ->
+                            dates.forEachIndexed { index, date ->
                                 Text(text = date)
+                                if (index < dates.size - 1) {
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                }
                             }
                         }
+                        Spacer(modifier = Modifier.size(24.dp))
+
                         //list information for date
-                        Text(text = "List information about trail and campsites here")
+                        Text(text = "Information about trail/campsites/itinerary here")
                     }
 
                 }

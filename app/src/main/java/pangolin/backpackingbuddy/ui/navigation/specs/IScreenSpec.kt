@@ -2,6 +2,7 @@ package pangolin.backpackingbuddy.ui.navigation.specs
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
@@ -20,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.MaterialTheme
 
 
 sealed interface IScreenSpec {
@@ -60,7 +62,7 @@ sealed interface IScreenSpec {
     private fun BottomAppBarContent(backpackingBuddyViewModel: BackpackingBuddyViewModel, navController: NavHostController,
                                  backStackEntry: NavBackStackEntry?, context: Context) {
         BottomAppBar(
-            modifier = Modifier.height(80.dp),
+            modifier = Modifier.height(80.dp).background(MaterialTheme.colorScheme.surface),
             actions = {
                 BottomAppBarActions(
                     backpackingBuddyViewModel = backpackingBuddyViewModel,

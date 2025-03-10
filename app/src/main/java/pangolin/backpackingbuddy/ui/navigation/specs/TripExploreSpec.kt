@@ -17,6 +17,7 @@ import pangolin.backpackingbuddy.ui.existingTripExplore.ExistingTripExploreScree
 import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
 import java.util.UUID
 
+
 data object TripExploreSpec : IScreenSpec {
     override val arguments: List<NamedNavArgument> = emptyList()
 
@@ -65,6 +66,9 @@ data object TripExploreSpec : IScreenSpec {
                 },
                 onItineraryClick = { trip ->
                     navController.navigate((TripItinerarySpec.buildRoute(trip.id.toString())))
+                },
+                onAddButtonClick = {
+                    navController.navigate(AddItemToTripSpec.route)
                 }
             )
         }

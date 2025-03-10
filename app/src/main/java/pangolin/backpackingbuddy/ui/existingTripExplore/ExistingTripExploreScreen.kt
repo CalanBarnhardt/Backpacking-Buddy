@@ -33,11 +33,13 @@ import pangolin.backpackingbuddy.ui.sharedComponents.NavButton
 import pangolin.backpackingbuddy.ui.sharedComponents.SearchBar
 import pangolin.backpackingbuddy.ui.sharedComponents.TripNameDisplay
 
+
 @Composable
 fun ExistingTripExploreScreen(
     trip: Trip,
     onOverviewClick: (Trip) -> Unit,
-    onItineraryClick: (Trip) -> Unit){
+    onItineraryClick: (Trip) -> Unit,
+    onAddButtonClick: () -> Unit) {
 
     val searchResults = listOf(Trail("Island Lake", "Durango", R.drawable.islandlake ), Trail("Haviland Lake Trail", "Durango", R.drawable.havilandlake, "3.8 miles, Moderate"))
 
@@ -76,7 +78,7 @@ fun ExistingTripExploreScreen(
                             .offset((-30.dp), (3.dp))
                             .align(Alignment.TopEnd)
                             .zIndex(1f))
-                            { AddButtonIcon() }
+                            { AddButtonIcon(onAddButtonClick) }
 
                         Card (modifier = Modifier
                             .fillMaxWidth(0.8f)
@@ -139,5 +141,5 @@ fun ExistingTripExploreScreen(
 @Preview
 @Composable
 fun PreviewExisitingTripExploreScreen () {
-    ExistingTripExploreScreen(Trip("Durango", listOf("A", "B", "C"), listOf("A", "B", "C")), {}, {})
+    ExistingTripExploreScreen(Trip("Durango", listOf("A", "B", "C"), listOf("A", "B", "C")), {}, {}, {})
 }
