@@ -19,6 +19,16 @@ import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
 import java.util.UUID
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.dp
 
 
 data object AddItemToTripSpec : IScreenSpec{
@@ -57,5 +67,29 @@ data object AddItemToTripSpec : IScreenSpec{
         navController: NavHostController,
         backStackEntry: NavBackStackEntry?,
         context: Context
-    ) {}
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = {
+                navController.navigate(ProfileScreenSpec.route)
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.AccountBox,
+                    contentDescription = "navigating"
+                )
+            }
+
+            Spacer(Modifier.padding(65.dp))
+
+            IconButton(onClick = {
+                navController.navigate(ExploreScreenSpec.route)
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.Home,
+                    contentDescription = "navigating"
+                )
+            }
+        }
+    }
 }
