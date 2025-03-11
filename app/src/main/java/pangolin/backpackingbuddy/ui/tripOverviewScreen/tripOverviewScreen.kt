@@ -1,4 +1,4 @@
-package pangolin.backpackingbuddy.ui.existingTripOverviewScreen
+package pangolin.backpackingbuddy.ui.tripOverviewScreen
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -15,27 +15,18 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.PointerIcon.Companion.Text
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import pangolin.backpackingbuddy.R
 import pangolin.backpackingbuddy.data.Trip
 import pangolin.backpackingbuddy.ui.sharedComponents.AddButtonIcon
-import pangolin.backpackingbuddy.ui.sharedComponents.BulletPoint
-import pangolin.backpackingbuddy.ui.sharedComponents.ExpandableIcon
 import pangolin.backpackingbuddy.ui.sharedComponents.NavButton
 import pangolin.backpackingbuddy.ui.sharedComponents.TripNameDisplay
 
@@ -61,7 +52,7 @@ fun ExistingTripOverviewScreen (
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly) {
 
-            NavButton(stringResource(R.string.overview_button), trip);
+            NavButton(stringResource(R.string.overview_button), trip, {}, true);
             NavButton(stringResource(R.string.itinerary_button), trip, onItineraryClick);
             NavButton(stringResource(R.string.explore_button), trip, onExploreClick);
         }
@@ -73,8 +64,8 @@ fun ExistingTripOverviewScreen (
             .fillMaxWidth(0.9f)
             .height(300.dp)
             .clip(RoundedCornerShape(12.dp))
-            .background(MaterialTheme.colorScheme.background))
-            {
+            .background(MaterialTheme.colorScheme.surface),
+        ){
             val trailsExpanded = remember { mutableStateOf<Boolean>(true) }
             val campsiteExpanded = remember { mutableStateOf<Boolean>(true) }
             LazyColumn (modifier = Modifier
@@ -88,6 +79,11 @@ fun ExistingTripOverviewScreen (
                         trip.trails.forEach { trail ->
                             OverviewForEach(trail)
                         }
+                        OverviewForEach("Island Lake")
+                        OverviewForEach("Haviland Lake Trail")
+                        OverviewForEach("Rifle Falls")
+                    }
+
 
                         Spacer(modifier = Modifier.size(16.dp))
 
@@ -98,14 +94,16 @@ fun ExistingTripOverviewScreen (
                             trip.campsites.forEach { campsite ->
                                 OverviewForEach(campsite)
                             }
+                            OverviewForEach("Bear Campground")
+                            OverviewForEach("Aspen Campground")
                         }
-                    }
+
                 }
             }
             Row (modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(5.dp)) {
-                AddButtonIcon(onAddButtonClick)
+                AddButtonIcon(onAddButtonClick, MaterialTheme.colorScheme.onPrimaryContainer)
             }
         }
     }
