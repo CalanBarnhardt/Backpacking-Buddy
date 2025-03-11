@@ -20,6 +20,7 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import pangolin.backpackingbuddy.R
+import pangolin.backpackingbuddy.data.Trip
 import pangolin.backpackingbuddy.ui.createTrip.CreateNewTripDate
 import pangolin.backpackingbuddy.ui.loginScreen.LoginScreen
 import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
@@ -41,14 +42,24 @@ data object CreateNewTripDateSpec : IScreenSpec{
         navBackStackEntry: NavBackStackEntry,
         context: Context
     ) {
-        val trip by backpackingBuddyViewModel.currentTripState.collectAsState()
+        val trip = Trip(
+            tripNameId = "Big Sky",
+            trails = emptyList(),
+            campsites = emptyList(),
+        )
 
-        trip?.let {
-            CreateNewTripDate(it, onGetStarted = { trip ->
-                navController.navigate(ProfileScreenSpec.route)
-                Toast.makeText(context, "Your trip has been added!", Toast.LENGTH_SHORT).show()
-            })
-        }
+        CreateNewTripDate(trip, onGetStarted = { trip ->
+            navController.navigate(ProfileScreenSpec.route)
+        })
+
+//        val trip by backpackingBuddyViewModel.currentTripState.collectAsState()
+//
+//        trip?.let {
+//            CreateNewTripDate(it, onGetStarted = { trip ->
+//                navController.navigate(ProfileScreenSpec.route)
+//                Toast.makeText(context, "Your trip has been added!", Toast.LENGTH_SHORT).show()
+//            })
+//        }
     }
 
     @Composable
