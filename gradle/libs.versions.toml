@@ -1,5 +1,5 @@
 [versions]
-agp = "8.8.0"
+agp = "8.9.1"
 kotlin = "2.0.21"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -7,11 +7,11 @@ junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
-composeBom = "2025.02.00"
-navVersion = "2.8.8"
-reflectVersion = "2.0.20"
-benchmarkMacro = "1.3.3"
-benchmarkTraceprocessorAndroid = "1.4.0-alpha08"
+composeBom = "2025.03.01"
+navVersion = "2.8.9"
+reflectVersion = "2.0.21"
+benchmarkMacro = "1.3.4"
+benchmarkTraceprocessorAndroid = "1.4.0-alpha10"
 
 
 [libraries]
