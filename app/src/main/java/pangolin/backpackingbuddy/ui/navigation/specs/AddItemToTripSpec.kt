@@ -19,8 +19,10 @@ import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
 import java.util.UUID
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
@@ -69,7 +71,9 @@ data object AddItemToTripSpec : IScreenSpec{
         context: Context
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
             IconButton(onClick = {
                 navController.navigate(ProfileScreenSpec.route)
@@ -80,14 +84,14 @@ data object AddItemToTripSpec : IScreenSpec{
                 )
             }
 
-            Spacer(Modifier.padding(65.dp))
+            Spacer(Modifier.padding(40.dp))
 
             IconButton(onClick = {
                 navController.navigate(ExploreScreenSpec.route)
             }) {
-                Icon(
-                    imageVector = Icons.Filled.Home,
-                    contentDescription = "navigating"
+                Image(
+                    painter = painterResource(id = R.drawable.compass_icon),
+                    contentDescription = "Compass Icon"
                 )
             }
         }

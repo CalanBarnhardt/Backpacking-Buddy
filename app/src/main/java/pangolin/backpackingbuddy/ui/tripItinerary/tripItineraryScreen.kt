@@ -30,6 +30,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.rememberCameraPositionState
 
 
 @Composable
@@ -37,6 +41,10 @@ fun ExisitngTripItinerary (
     trip : Trip,
     onOverviewClick: (Trip) -> Unit,
     onExploreClick: (Trip) -> Unit ) {
+    val cameraPosition = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(LatLng(0.0, 0.0), 0f)
+    }
+
     Column (modifier = Modifier
         .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally) {
@@ -64,10 +72,12 @@ fun ExisitngTripItinerary (
                 .background(MaterialTheme.colorScheme.tertiary),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = "Map",
-                textAlign = TextAlign.Center
-            )
+            GoogleMap(
+                modifier = Modifier.fillMaxSize(),
+                cameraPositionState = cameraPosition
+            ) {
+                // TODO - will need to have a location/locations associated with each trip to have markers
+            }
         }
         Spacer(modifier = Modifier.size(16.dp))
 
