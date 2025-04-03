@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "573520236819",
+    "project_id": "backpacking-buddy",
+    "storage_bucket": "backpacking-buddy.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:573520236819:android:7da1522a01e6c8a40b4ae6",
+        "android_client_info": {
+          "package_name": "pangolin.backpackingbuddy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnGm0uocxBHf4fbnPljp4JHs28w0C_y0M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

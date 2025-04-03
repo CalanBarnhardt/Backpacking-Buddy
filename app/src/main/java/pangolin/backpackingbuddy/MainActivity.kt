@@ -2,6 +2,7 @@ package pangolin.backpackingbuddy
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -9,10 +10,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import pangolin.backpackingbuddy.data.TripsRepo
 import pangolin.backpackingbuddy.ui.navigation.BackpackingBuddyNavHost
 import pangolin.backpackingbuddy.ui.navigation.BottomAppBar
@@ -20,14 +25,28 @@ import pangolin.backpackingbuddy.ui.theme.BackpackingBuddyTheme
 import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
 
 class MainActivity : ComponentActivity() {
+    private lateinit var auth: FirebaseAuth
+    val backpackingBuddyViewModel = BackpackingBuddyViewModel(TripsRepo.trip)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val backpackingBuddyViewModel = BackpackingBuddyViewModel(TripsRepo.trip)
+        auth = Firebase.auth
 
         setContent {
             MainActivityContent(backpackingBuddyViewModel = backpackingBuddyViewModel)
+        }
+    }
+
+    public override fun onStart() {
+        super.onStart()
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            currentUser.reload()
+            backpackingBuddyViewModel.triggerNavigateToHome()
+        } else {
+            Log.d("MainActivity", "User is not logged in onStart.")
         }
     }
 }
@@ -38,6 +57,16 @@ private fun MainActivityContent(
 ) {
     val navController = rememberNavController()
     val context = LocalContext.current
+
+    LaunchedEffect(key1 = Unit) {
+        backpackingBuddyViewModel.navigateToHomeEvent.collect {
+            Log.d("MainActivityContent", "Collected navigation event. Navigating to home.")
+            navController.navigate("trip_explore") {
+            }
+        }
+    }
+
+
 
     BackpackingBuddyTheme {
         // A surface container using the 'background' color from the theme
