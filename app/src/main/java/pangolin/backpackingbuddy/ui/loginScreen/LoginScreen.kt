@@ -1,39 +1,42 @@
 package pangolin.backpackingbuddy.ui.loginScreen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pangolin.backpackingbuddy.R
-import pangolin.backpackingbuddy.ui.sharedComponents.IconHeaderButton
 
 @Composable
-fun LoginScreen(onLogin: () -> Unit, onSignup: () -> Unit){
+fun LoginScreen(
+    emailValue: String,
+    passwordValue: String,
+    isLoading: Boolean,
+    errorMessage: String?,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onSignup: () -> Unit,
+    onLogin: () -> Unit,
+) {
+    var passwordVisible by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -50,19 +53,71 @@ fun LoginScreen(onLogin: () -> Unit, onSignup: () -> Unit){
             modifier = Modifier.padding(bottom = 32.dp)
         )
 
-        IconHeaderButton(R.string.username, R.string.type_username, Icons.Filled.Person)
+        OutlinedTextField(
+            value = emailValue,
+            onValueChange = onEmailChange,
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text(stringResource(R.string.email_address)) },
+            placeholder = { Text(stringResource(R.string.type_email)) },
+            leadingIcon = { Icon(Icons.Filled.Email, contentDescription = "Email Icon") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            singleLine = true,
+            isError = errorMessage != null
+        )
+
         Spacer(modifier = Modifier.height(16.dp))
-        IconHeaderButton(R.string.password, R.string.type_password, Icons.Filled.Lock)
+
+        OutlinedTextField(
+            value = passwordValue,
+            onValueChange = onPasswordChange,
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text(stringResource(R.string.password)) },
+            placeholder = { Text(stringResource(R.string.type_password)) },
+            leadingIcon = { Icon(Icons.Filled.Lock, contentDescription = "Password Icon") },
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            singleLine = true,
+            trailingIcon = {
+                val image = if (passwordVisible)
+                    Icons.Filled.Visibility
+                else Icons.Filled.VisibilityOff
+                val description = if (passwordVisible) "Hide password" else "Show password"
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(imageVector = image, contentDescription = description)
+                }
+            },
+            isError = errorMessage != null
+        )
+
+        errorMessage?.let {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = it,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
 
         Spacer(modifier = Modifier.height(32.dp))
 
         Button(
-            onClick = { onLogin() },
+            onClick = onLogin,
             modifier = Modifier.fillMaxWidth(0.8f),
             shape = MaterialTheme.shapes.medium,
-            contentPadding = PaddingValues(16.dp)
+            contentPadding = PaddingValues(16.dp),
+            enabled = !isLoading
         ) {
-            Text(stringResource(R.string.login))
+            if (isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(24.dp),
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    strokeWidth = 2.dp
+                )
+            } else {
+                Text(stringResource(R.string.login))
+            }
         }
 
         Spacer(modifier = Modifier.height(48.dp))
@@ -77,12 +132,12 @@ fun LoginScreen(onLogin: () -> Unit, onSignup: () -> Unit){
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
-
                 OutlinedButton(
-                    onClick = { onSignup() },
+                    onClick = onSignup,
                     modifier = Modifier.fillMaxWidth(0.8f),
                     shape = MaterialTheme.shapes.medium,
-                    contentPadding = PaddingValues(16.dp)
+                    contentPadding = PaddingValues(16.dp),
+                    enabled = !isLoading
                 ) {
                     Text(stringResource(R.string.signup))
                 }
@@ -91,8 +146,32 @@ fun LoginScreen(onLogin: () -> Unit, onSignup: () -> Unit){
     }
 }
 
-@Preview
+@Preview(showBackground = true, device = "spec:width=411dp,height=891dp")
 @Composable
 fun PreviewLoginScreen() {
-    LoginScreen({}, {})
+    LoginScreen(
+        emailValue = "test@example.com",
+        passwordValue = "password",
+        isLoading = false,
+        errorMessage = null,
+        onEmailChange = {},
+        onPasswordChange = {},
+        onSignup = {},
+        onLogin = {}
+    )
+}
+
+@Preview(showBackground = true, device = "spec:width=411dp,height=891dp")
+@Composable
+fun PreviewLoginScreenLoading() {
+    LoginScreen(
+        emailValue = "test@example.com",
+        passwordValue = "password",
+        isLoading = true,
+        errorMessage = null,
+        onEmailChange = {},
+        onPasswordChange = {},
+        onSignup = {},
+        onLogin = {}
+    )
 }

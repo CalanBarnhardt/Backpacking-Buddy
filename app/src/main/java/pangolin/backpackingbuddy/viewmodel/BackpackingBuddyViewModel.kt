@@ -1,8 +1,6 @@
 package pangolin.backpackingbuddy.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.toMutableStateList
-import androidx.core.content.PackageManagerCompat.LOG_TAG
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
@@ -67,78 +65,116 @@ class BackpackingBuddyViewModel(private val mTrips : List<Trip>): ViewModel() {
     }
 
     // Signup Stuff
-    private val _signupEmail = MutableStateFlow("")
-    val signupEmail: StateFlow<String> = _signupEmail.asStateFlow()
+    private val _signinEmail = MutableStateFlow("")
+    val signinEmail: StateFlow<String> = _signinEmail.asStateFlow()
 
-    private val _signupPassword = MutableStateFlow("")
-    val signupPassword: StateFlow<String> = _signupPassword.asStateFlow()
+    private val _signinPassword = MutableStateFlow("")
+    val signinPassword: StateFlow<String> = _signinPassword.asStateFlow()
 
-    private val _signupIsLoading = MutableStateFlow(false)
-    val signupIsLoading: StateFlow<Boolean> = _signupIsLoading.asStateFlow()
+    private val _signinIsLoading = MutableStateFlow(false)
+    val signinIsLoading: StateFlow<Boolean> = _signinIsLoading.asStateFlow()
 
-    private val _signupError = MutableStateFlow<String?>(null) // Holds potential error messages
-    val signupError: StateFlow<String?> = _signupError.asStateFlow()
+    private val _signinError = MutableStateFlow<String?>(null) // Holds potential error messages
+    val signinError: StateFlow<String?> = _signinError.asStateFlow()
 
-    private val _signupSuccessEvent = MutableSharedFlow<Unit>()
-    val signupSuccessEvent = _signupSuccessEvent.asSharedFlow()
+    private val _signinSuccessEvent = MutableSharedFlow<Unit>()
+    val signinSuccessEvent = _signinSuccessEvent.asSharedFlow()
 
-    fun onSignupEmailChange(newEmail: String) {
-        _signupEmail.value = newEmail
-        if (_signupError.value != null) {
-            _signupError.value = null
+    fun onSigninEmailChange(newEmail: String) {
+        _signinEmail.value = newEmail
+        if (_signinError.value != null) {
+            _signinError.value = null
         }
     }
 
-    fun onSignupPasswordChange(newPassword: String) {
-        _signupPassword.value = newPassword
-        if (_signupError.value != null) {
-            _signupError.value = null
+    fun onSigninPasswordChange(newPassword: String) {
+        _signinPassword.value = newPassword
+        if (_signinError.value != null) {
+            _signinError.value = null
         }
     }
 
     fun performSignup() {
-        if (_signupEmail.value.isBlank() || !android.util.Patterns.EMAIL_ADDRESS.matcher(_signupEmail.value).matches()) {
-            _signupError.value = "Please enter a valid email address."
+        if (_signinEmail.value.isBlank() || !android.util.Patterns.EMAIL_ADDRESS.matcher(_signinEmail.value).matches()) {
+            _signinError.value = "Please enter a valid email address."
             return
         }
-        if (_signupPassword.value.length < 6) {
-            _signupError.value = "Password must be at least 6 characters."
+        if (_signinPassword.value.length < 6) {
+            _signinError.value = "Password must be at least 6 characters."
             return
         }
 
-        _signupIsLoading.value = true
-        _signupError.value = null
+        _signinIsLoading.value = true
+        _signinError.value = null
 
         viewModelScope.launch {
             try {
-                auth.createUserWithEmailAndPassword(_signupEmail.value.trim(), _signupPassword.value)
+                auth.createUserWithEmailAndPassword(_signinEmail.value.trim(), _signinPassword.value)
                     .addOnCompleteListener { task ->
-                        _signupIsLoading.value = false
+                        _signinIsLoading.value = false
                         if (task.isSuccessful) {
                             Log.d(LOG_TAG, "createUserWithEmail:success. User: ${auth.currentUser?.uid}")
-                            _signupEmail.value = ""
-                            _signupPassword.value = ""
+                            _signinEmail.value = ""
+                            _signinPassword.value = ""
                             viewModelScope.launch {
-                                _signupSuccessEvent.emit(Unit)
+                                _signinSuccessEvent.emit(Unit)
                             }
                         } else {
                             Log.w(LOG_TAG, "createUserWithEmail:failure", task.exception)
-                            _signupError.value = task.exception?.message ?: "Signup failed. Please try again."
+                            _signinError.value = task.exception?.message ?: "Signup failed. Please try again."
                         }
                     }
             } catch (e: Exception) {
-                _signupIsLoading.value = false
+                _signinIsLoading.value = false
                 Log.e(LOG_TAG, "Exception during signup process", e)
-                _signupError.value = "An unexpected error occurred: ${e.localizedMessage}"
+                _signinError.value = "An unexpected error occurred: ${e.localizedMessage}"
             }
         }
     }
 
+    fun performLogin() {
+            if (_signinEmail.value.isBlank() || !android.util.Patterns.EMAIL_ADDRESS.matcher(_signinEmail.value).matches()) {
+                _signinError.value = "Please enter a valid email address."
+                return
+            }
+            if (_signinPassword.value.length < 6) {
+                _signinError.value = "Password must be at least 6 characters."
+                return
+            }
+
+            _signinIsLoading.value = true
+            _signinError.value = null
+
+            viewModelScope.launch {
+                try {
+                    auth.signInWithEmailAndPassword(_signinEmail.value.trim(), _signinPassword.value)
+                        .addOnCompleteListener { task ->
+                            _signinIsLoading.value = false
+                            if (task.isSuccessful) {
+                                Log.d(LOG_TAG, "loginUserWithEmail:success. User: ${auth.currentUser?.uid}")
+                                _signinEmail.value = ""
+                                _signinPassword.value = ""
+                                viewModelScope.launch {
+                                    _signinSuccessEvent.emit(Unit)
+                                }
+                            } else {
+                                Log.w(LOG_TAG, "loginUserWithEmail:failure", task.exception)
+                                _signinError.value = "Your email or password is incorrect"
+                            }
+                        }
+                } catch (e: Exception) {
+                    _signinIsLoading.value = false
+                    Log.e(LOG_TAG, "Exception during login process", e)
+                    _signinError.value = "An unexpected error occurred: ${e.localizedMessage}"
+                }
+            }
+    }
+
     fun clearSignupState() {
-        _signupEmail.value = ""
-        _signupPassword.value = ""
-        _signupIsLoading.value = false
-        _signupError.value = null
+        _signinEmail.value = ""
+        _signinPassword.value = ""
+        _signinIsLoading.value = false
+        _signinError.value = null
     }
 
 }

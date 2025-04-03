@@ -30,13 +30,13 @@ data object SignupScreenSpec : IScreenSpec{
         navBackStackEntry: NavBackStackEntry,
         context: Context
     ) {
-        val email by backpackingBuddyViewModel.signupEmail.collectAsState()
-        val password by backpackingBuddyViewModel.signupPassword.collectAsState()
-        val isLoading by backpackingBuddyViewModel.signupIsLoading.collectAsState()
-        val errorMessage by backpackingBuddyViewModel.signupError.collectAsState()
+        val email by backpackingBuddyViewModel.signinEmail.collectAsState()
+        val password by backpackingBuddyViewModel.signinPassword.collectAsState()
+        val isLoading by backpackingBuddyViewModel.signinIsLoading.collectAsState()
+        val errorMessage by backpackingBuddyViewModel.signinError.collectAsState()
 
         LaunchedEffect(key1 = Unit) {
-            backpackingBuddyViewModel.signupSuccessEvent.collect {
+            backpackingBuddyViewModel.signinSuccessEvent.collect {
                 Log.d(LOG_TAG, "Signup successful event received. Navigating to profile.")
                 val startRoute = ExploreScreenSpec.route
                 navController.navigate(startRoute)
@@ -48,8 +48,8 @@ data object SignupScreenSpec : IScreenSpec{
             passwordValue = password,
             isLoading = isLoading,
             errorMessage = errorMessage,
-            onEmailChange = { backpackingBuddyViewModel.onSignupEmailChange(it) },
-            onPasswordChange = { backpackingBuddyViewModel.onSignupPasswordChange(it) },
+            onEmailChange = { backpackingBuddyViewModel.onSigninEmailChange(it) },
+            onPasswordChange = { backpackingBuddyViewModel.onSigninPasswordChange(it) },
             onSignup = {
                 Log.d(LOG_TAG, "Signup button clicked. Calling ViewModel performSignup.")
                 backpackingBuddyViewModel.performSignup()
