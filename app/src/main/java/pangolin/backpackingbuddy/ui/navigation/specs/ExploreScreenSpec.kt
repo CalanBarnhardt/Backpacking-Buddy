@@ -1,18 +1,21 @@
 package pangolin.backpackingbuddy.ui.navigation.specs
 
 import android.content.Context
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
@@ -48,7 +51,9 @@ object ExploreScreenSpec : IScreenSpec {
         context: Context
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
             IconButton(onClick = {
                 navController.navigate(ProfileScreenSpec.route)
@@ -59,14 +64,14 @@ object ExploreScreenSpec : IScreenSpec {
                 )
             }
 
-            Spacer(Modifier.padding(65.dp))
+            Spacer(Modifier.padding(40.dp))
 
             IconButton(onClick = {
 //                navController.navigate(ExploreScreenSpec.route)
             }) {
-                Icon(
-                    imageVector = Icons.Filled.Home,
-                    contentDescription = "navigating"
+                Image(
+                    painter = painterResource(id = R.drawable.compass_icon),
+                    contentDescription = "Compass Icon"
                 )
             }
         }
