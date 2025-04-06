@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.google.play.services.location)
     implementation(libs.google.play.servies.maps)
     implementation(libs.google.maps.compose)
+    implementation(libs.firebase.common.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -43,7 +43,7 @@ fun CreateNewTripName(onClick : () -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
-                .height(200.dp)
+                .height(50.dp)
                 .background(Color.Gray)
                 .padding(16.dp),
             textStyle = TextStyle(color = Color.White),
