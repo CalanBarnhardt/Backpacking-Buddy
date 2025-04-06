@@ -59,7 +59,10 @@ data object ProfileScreenSpec : IScreenSpec{
                     }
                 }
                              },
-            onSignout = { navController.navigate("login")})
+            onSignout = { navController.navigate("login")},
+            onSearch = {
+                navController.navigate(TrailScreenSpec.route)
+            })
     }
 
     @Composable
