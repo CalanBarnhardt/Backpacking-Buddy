@@ -19,10 +19,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import pangolin.backpackingbuddy.R
-import pangolin.backpackingbuddy.data.Trip
 import pangolin.backpackingbuddy.ui.sharedComponents.NavButton
 import pangolin.backpackingbuddy.ui.sharedComponents.TripNameDisplay
 import androidx.compose.material3.Text
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -34,16 +34,21 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.rememberCameraPositionState
+import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
+import java.util.UUID
 
 
 @Composable
 fun ExisitngTripItinerary (
-    trip : Trip,
-    onOverviewClick: (Trip) -> Unit,
-    onExploreClick: (Trip) -> Unit ) {
+    viewModel: BackpackingBuddyViewModel,
+    tripId : UUID,
+    onOverviewClick: () -> Unit,
+    onExploreClick: () -> Unit ) {
     val cameraPosition = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(LatLng(0.0, 0.0), 0f)
     }
+
+    val tripName = viewModel.getNameFromID(tripId).collectAsState(initial = "")
 
     Column (modifier = Modifier
         .fillMaxWidth(),
@@ -51,15 +56,16 @@ fun ExisitngTripItinerary (
 
         Spacer(modifier = Modifier.size(55.dp))
         // trip name display
-        TripNameDisplay(trip.tripNameId)
+        TripNameDisplay(tripName.value)
+
         Spacer(modifier = Modifier.size(16.dp))
 
         // button display
         Row (modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly) {
-            NavButton(stringResource(R.string.overview_button), trip, onOverviewClick)
-            NavButton(stringResource(R.string.itinerary_button), trip, {}, true)
-            NavButton(stringResource(R.string.explore_button), trip, onExploreClick)
+            NavButton(stringResource(R.string.overview_button) , onOverviewClick)
+            NavButton(stringResource(R.string.itinerary_button), {}, true)
+            NavButton(stringResource(R.string.explore_button), onExploreClick)
 
         }
         Spacer(modifier = Modifier.size(16.dp))
@@ -126,6 +132,6 @@ fun ExisitngTripItinerary (
 @Preview
 @Composable
 fun previewExistingTripItinerary(){
-    ExisitngTripItinerary(Trip("Durango", listOf("A", "B", "C"), listOf("A", "B", "C")), {}, {})
+    //ExisitngTripItinerary(Trip("Durango", listOf("A", "B", "C"), listOf("A", "B", "C")), {}, {})
 
 }

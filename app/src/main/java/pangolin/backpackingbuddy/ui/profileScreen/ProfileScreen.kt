@@ -25,6 +25,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -32,13 +34,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.flow.Flow
 import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 import pangolin.backpackingbuddy.R
-import pangolin.backpackingbuddy.data.Trip
-import pangolin.backpackingbuddy.data.TripsRepo
+import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
 
 @Composable
-fun ProfileScreen(onCreateTrip: () -> Unit, onExistingTrip: (Trip) -> Unit, onSignout: () -> Unit) {
+fun ProfileScreen(viewModel: BackpackingBuddyViewModel, onCreateTrip: () -> Unit, onExistingTrip: (String) -> Unit, onSignout: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -93,19 +95,25 @@ fun ProfileScreen(onCreateTrip: () -> Unit, onExistingTrip: (Trip) -> Unit, onSi
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // displays a button for each existing trip
+
+        // retrieves list of trip names
+        val tripList by viewModel.retrieveNames().collectAsState(initial = emptyList())
+
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
             contentPadding = PaddingValues(vertical = 8.dp)
         ) {
-            items(TripsRepo.trip) { trip ->
+
+            items(tripList) { trip ->
                 Button(
                     onClick = { onExistingTrip(trip) },
                     modifier = Modifier.fillMaxWidth(0.8f),
                     shape = MaterialTheme.shapes.medium,
                     contentPadding = PaddingValues(24.dp)
                 ) {
-                    Text(trip.tripNameId)
+                    Text(trip)
                 }
                 Spacer(modifier = Modifier.height(16.dp))
             }
@@ -116,5 +124,5 @@ fun ProfileScreen(onCreateTrip: () -> Unit, onExistingTrip: (Trip) -> Unit, onSi
 @Preview
 @Composable
 fun PreviewProfileScreen() {
-    ProfileScreen({}, {}, {})
+    //ProfileScreen({}, {}, {})
 }

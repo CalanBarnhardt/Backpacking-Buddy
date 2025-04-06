@@ -11,7 +11,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import pangolin.backpackingbuddy.R
-import pangolin.backpackingbuddy.data.Trip
 import pangolin.backpackingbuddy.ui.sharedComponents.NavButton
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -37,12 +36,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.window.Popup
+import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 @Composable
-fun CreateNewTripDate(trip: Trip, onGetStarted: (Trip) -> Unit) {
+fun CreateNewTripDate(viewModel: BackpackingBuddyViewModel,
+                      tripName: String,
+                      onGetStarted: () -> Unit) {
     var showRangePicker by remember { mutableStateOf(false) }
 
     var startDate by remember { mutableStateOf("") }
@@ -100,12 +102,26 @@ fun CreateNewTripDate(trip: Trip, onGetStarted: (Trip) -> Unit) {
                 .fillMaxWidth()
         )
 
-        Button(
-            onClick = { onGetStarted(trip) },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Get Started")
+        // lambda for adding a new trip to database through viewmodel
+        val lambda : () -> Unit = {
+            val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.US)
+
+            val parsedStartDate: Date = dateFormat.parse(startDate)!!
+            val parsedEndDate: Date = dateFormat.parse(endDate)!!
+
+            viewModel.addTrip(tripName, parsedStartDate, parsedEndDate)
+
+            onGetStarted()
         }
+
+        NavButton(stringResource(id = R.string.get_started), lambda)
+
+//        Button(
+//            onClick = { lambda },
+//            modifier = Modifier.fillMaxWidth()
+//        ) {
+//            Text("Get Started")
+//        }
     }
 
     if (showRangePicker) {
@@ -159,10 +175,4 @@ fun CreateNewTripDateDialog(
                 .padding(16.dp)
         )
     }
-}
-
-@Preview
-@Composable
-fun PreviewNameThisTripScreen() {
-    CreateNewTripDate(Trip("Durango", listOf("A", "B", "C"), listOf("A", "B", "C")), {})
 }

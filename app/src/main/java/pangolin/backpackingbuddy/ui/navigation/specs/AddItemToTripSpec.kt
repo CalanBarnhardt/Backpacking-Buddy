@@ -3,7 +3,6 @@ package pangolin.backpackingbuddy.ui.navigation.specs
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -11,12 +10,9 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import pangolin.backpackingbuddy.R
-import pangolin.backpackingbuddy.data.Trail
-import pangolin.backpackingbuddy.data.Trip
+import pangolin.backpackingbuddy.data.dataEntries.Trail
 import pangolin.backpackingbuddy.ui.exploreScreen.AddItemToTrip
-import pangolin.backpackingbuddy.ui.loginScreen.LoginScreen
 import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
-import java.util.UUID
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -26,7 +22,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.ui.Alignment
@@ -49,17 +44,17 @@ data object AddItemToTripSpec : IScreenSpec{
         navBackStackEntry: NavBackStackEntry,
         context: Context
     ) {
-        val trip by backpackingBuddyViewModel.currentTripState.collectAsState()
+        //val trip by backpackingBuddyViewModel.currentTripState.collectAsState()
 
-        trip?.let { AddItemToTrip(it,
-            Trail("Haviland Lake Trail",
-                "Durango",
-                R.drawable.havilandlake,
-                "3.8 miles, Moderate"),
-            onAddNewItemClick = { trip ->
-                Toast.makeText(context, "'Haviland Lake Trail' has been added to your trip!", Toast.LENGTH_SHORT).show()
-                navController.navigate((TripOverviewSpec.buildRoute(trip.id.toString())))
-            }) }
+//        trip?.let { AddItemToTrip(it,
+//            Trail("Haviland Lake Trail",
+//                "Durango",
+//                R.drawable.havilandlake,
+//                "3.8 miles, Moderate"),
+//            onAddNewItemClick = { trip ->
+//                Toast.makeText(context, "'Haviland Lake Trail' has been added to your trip!", Toast.LENGTH_SHORT).show()
+//                navController.navigate((TripOverviewSpec.buildRoute(trip.id.toString())))
+//            }) }
 
     }
 
