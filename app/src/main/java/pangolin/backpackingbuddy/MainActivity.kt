@@ -14,23 +14,28 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
-import pangolin.backpackingbuddy.data.TripsRepo
 import pangolin.backpackingbuddy.ui.navigation.BackpackingBuddyNavHost
 import pangolin.backpackingbuddy.ui.navigation.BottomAppBar
 import pangolin.backpackingbuddy.ui.theme.BackpackingBuddyTheme
 import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
+import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModelFactory
 
 class MainActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
-    val backpackingBuddyViewModel = BackpackingBuddyViewModel(TripsRepo.trip)
+    private lateinit var backpackingBuddyViewModel: BackpackingBuddyViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val factory = BackpackingBuddyViewModelFactory(this, lifecycleScope)
+        backpackingBuddyViewModel = ViewModelProvider(this, factory)[factory.getViewModelClass()]
 
         auth = Firebase.auth
 
@@ -94,6 +99,6 @@ private fun MainActivityContent(
 @Preview(showBackground = true)
 @Composable
 fun MainActivityPreview() {
-    val viewModel = BackpackingBuddyViewModel(TripsRepo.trip)
-    MainActivityContent(backpackingBuddyViewModel = viewModel)
+    //val viewModel = BackpackingBuddyViewModel(TripsRepo.trip)
+    //MainActivityContent(backpackingBuddyViewModel = viewModel)
 }

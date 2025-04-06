@@ -25,6 +25,8 @@ import pangolin.backpackingbuddy.R
 import pangolin.backpackingbuddy.ui.createTrip.CreateNewTripName
 import pangolin.backpackingbuddy.ui.loginScreen.LoginScreen
 import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 
 data object CreateNewTripNameSpec : IScreenSpec{
@@ -43,7 +45,9 @@ data object CreateNewTripNameSpec : IScreenSpec{
         navBackStackEntry: NavBackStackEntry,
         context: Context
     ) {
-        CreateNewTripName(onClick = {navController.navigate("trip-date")})
+        CreateNewTripName(onClick = { tripName ->
+            val encodedTripName = URLEncoder.encode(tripName, StandardCharsets.UTF_8.toString())
+            navController.navigate("trip-date/$encodedTripName")})
     }
 
     @Composable

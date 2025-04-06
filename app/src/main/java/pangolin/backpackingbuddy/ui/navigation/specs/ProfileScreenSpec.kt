@@ -15,6 +15,8 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -22,9 +24,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.launch
 import pangolin.backpackingbuddy.R
 import pangolin.backpackingbuddy.ui.profileScreen.ProfileScreen
 import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
+import java.util.UUID
 
 data object ProfileScreenSpec : IScreenSpec{
     private const val LOG_TAG = "448.ProfileScreenSpec"
@@ -42,10 +46,19 @@ data object ProfileScreenSpec : IScreenSpec{
         navBackStackEntry: NavBackStackEntry,
         context: Context
     ) {
+
+        val coroutineScope = rememberCoroutineScope()
+
         ProfileScreen(
+            backpackingBuddyViewModel,
             onCreateTrip = { navController.navigate("trip-name")},
             onExistingTrip = { trip ->
-                navController.navigate((TripOverviewSpec.buildRoute(trip.id.toString()))) },
+                coroutineScope.launch {
+                    backpackingBuddyViewModel.getIDFromName(trip).collect { tripID ->
+                        navController.navigate(TripOverviewSpec.buildRoute(tripID.toString()))
+                    }
+                }
+                             },
             onSignout = { navController.navigate("login")})
     }
 

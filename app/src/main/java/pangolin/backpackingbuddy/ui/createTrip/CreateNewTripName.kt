@@ -25,7 +25,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 @Composable
-fun CreateNewTripName(onClick : () -> Unit) {
+fun CreateNewTripName(onClick : (String) -> Unit) {
     val inputText = remember { androidx.compose.runtime.mutableStateOf(TextFieldValue()) }
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -56,7 +56,7 @@ fun CreateNewTripName(onClick : () -> Unit) {
         )
 
         Button(
-            onClick = { onClick() },
+            onClick = { onClick(inputText.value.text) },
             modifier = Modifier.padding(top = 16.dp)
         ) {
             Text(text = "Next")

@@ -7,12 +7,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import pangolin.backpackingbuddy.data.Trip
 import pangolin.backpackingbuddy.ui.sharedComponents.BulletPoint
 import pangolin.backpackingbuddy.ui.sharedComponents.ExpandableIcon
 
 @Composable
-fun OverviewDropdown(isExpanded: Boolean, trip: Trip, text: String) : Boolean {
+fun OverviewDropdown(isExpanded: Boolean, text: String) : Boolean {
     var expandedToggle = isExpanded
     Row(modifier = Modifier
         .fillMaxWidth()) {

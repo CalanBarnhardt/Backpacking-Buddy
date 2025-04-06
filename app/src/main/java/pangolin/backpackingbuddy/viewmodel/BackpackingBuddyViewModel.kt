@@ -1,58 +1,66 @@
 package pangolin.backpackingbuddy.viewmodel
 
+import BackpackingBuddyRepo
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import pangolin.backpackingbuddy.data.Trip
+import java.util.Date
 import java.util.UUID
 
-class BackpackingBuddyViewModel(private val mTrips : List<Trip>): ViewModel() {
+class BackpackingBuddyViewModel(private val backpackingBuddyRepo : BackpackingBuddyRepo): ViewModel() {
     private val auth: FirebaseAuth = Firebase.auth
 
     companion object {
         private const val LOG_TAG = "448.BackpackingBuddyViewModel"
     }
-//    private val mTrips = trips.toMutableStateList()
+    // ===================================================================================================================
+    // STATE FLOWS
+    // ===================================================================================================================
+    private val mTripNames : MutableStateFlow<List<String>> = MutableStateFlow(emptyList())
+    val tripNames: StateFlow<List<String>>
+        get() = mTripNames.asStateFlow()
 
-    /**
-     * holds list of all characters stored within the view model
-     */
-    val trips: List<Trip>
-        get() = mTrips
+    // ===================================================================================================================
+    // DATABASE RETRIEVAL OPERATIONS
+    // ===================================================================================================================
+    // TODO: retrieve all the trips listed under the user to be observed by the profile screen so a button can display per
 
-    private val mCurrentTripState: MutableStateFlow<Trip?> = MutableStateFlow(null)
+    // retrieves trip names for profile screen
+    fun retrieveNames () : Flow<List<String>> {
+        return backpackingBuddyRepo.getTripNames()
 
-    val currentTripState: StateFlow<Trip?>
-        get() = mCurrentTripState.asStateFlow()
-
-    /**
-     * Loads a character by id into currentCharacterState, if it exists.  If id is not found
-     * in list of characters, then sets currentCharacterState to null.
-     * @param uuid id to use for character lookup
-     */
-    fun loadTripByUUID(uuid: UUID) {
-        Log.d(LOG_TAG, "loadTripByUUID($uuid)")
-        mCurrentTripState.value = null
-        mTrips.forEach { trip ->
-            if(trip.id == uuid) {
-                Log.d(LOG_TAG, "Trip found! $trip")
-                mCurrentTripState.value = trip
-                return
-            }
-        }
-        Log.d(LOG_TAG, "Trip not found")
-        return
     }
 
+    // retrieves trip ID from a given trip name
+    fun getIDFromName (trip_name: String) : Flow<UUID> {
+        return backpackingBuddyRepo.getIDFromName(trip_name)
+    }
+
+    // retrieve trip name from given trip ID
+    fun getNameFromID (trip_id: UUID) : Flow<String> {
+        return backpackingBuddyRepo.getNameFromID(trip_id)
+    }
+
+
+    fun addTrip (tripName: String, start_date: Date, end_date: Date) {
+        viewModelScope.launch {
+            backpackingBuddyRepo.addTrip(tripName, start_date, end_date)
+        }
+    }
+
+    //====================================================================================================================
+    // SIGNUP SCREEN OPERATIONS
+    //====================================================================================================================
 
     //Navigating from signup/login
     private val _navigateToHomeEvent = MutableSharedFlow<Unit>()

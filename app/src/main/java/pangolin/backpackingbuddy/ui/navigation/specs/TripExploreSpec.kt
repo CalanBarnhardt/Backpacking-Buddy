@@ -63,26 +63,43 @@ data object TripExploreSpec : IScreenSpec {
         val uuidString = navBackStackEntry.arguments?.getString(ARG_UUID_NAME)
         val tripId = uuidString?.let { UUID.fromString(it) }
 
-        LaunchedEffect(tripId) {
-            tripId?.let { backpackingBuddyViewModel.loadTripByUUID(it) }
-        }
-
-        val trip by backpackingBuddyViewModel.currentTripState.collectAsState()
-
-        trip?.let {
+        if (tripId != null) {
             ExistingTripExploreScreen(
-                trip = it,
-                onOverviewClick = { trip ->
-                    navController.navigate((TripOverviewSpec.buildRoute(trip.id.toString())))
+                backpackingBuddyViewModel,
+                tripId,
+                onOverviewClick = {
+                    navController.navigate((TripOverviewSpec.buildRoute(tripId.toString())))
                 },
-                onItineraryClick = { trip ->
-                    navController.navigate((TripItinerarySpec.buildRoute(trip.id.toString())))
+                onItineraryClick = {
+                    navController.navigate((TripItinerarySpec.buildRoute(tripId.toString())))
                 },
                 onAddButtonClick = {
                     navController.navigate(AddItemToTripSpec.route)
                 }
             )
         }
+
+        //TODO :
+//        LaunchedEffect(tripId) {
+//            tripId?.let { backpackingBuddyViewModel.loadTripByUUID(it) }
+//        }
+
+       // val trip by backpackingBuddyViewModel.currentTripState.collectAsState()
+
+//        trip?.let {
+//            ExistingTripExploreScreen(
+//                trip = it,
+//                onOverviewClick = { trip ->
+//                    navController.navigate((TripOverviewSpec.buildRoute(trip.id.toString())))
+//                },
+//                onItineraryClick = { trip ->
+//                    navController.navigate((TripItinerarySpec.buildRoute(trip.id.toString())))
+//                },
+//                onAddButtonClick = {
+//                    navController.navigate(AddItemToTripSpec.route)
+//                }
+//            )
+//        }
     }
 
     @Composable

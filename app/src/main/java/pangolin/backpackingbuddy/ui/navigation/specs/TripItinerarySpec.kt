@@ -62,21 +62,33 @@ data object TripItinerarySpec : IScreenSpec {
         val uuidString = navBackStackEntry.arguments?.getString(ARG_UUID_NAME)
         val tripId = uuidString?.let { UUID.fromString(it) }
 
-        LaunchedEffect(tripId) {
-            tripId?.let { backpackingBuddyViewModel.loadTripByUUID(it) }
-        }
-
-        val trip by backpackingBuddyViewModel.currentTripState.collectAsState()
-
-        trip?.let {
+        if (tripId != null) {
             ExisitngTripItinerary(
-                trip = it,
-                onOverviewClick = { trip ->
-                    navController.navigate((TripOverviewSpec.buildRoute(trip.id.toString()))) },
-                onExploreClick = { trip ->
-                    navController.navigate((TripExploreSpec.buildRoute(trip.id.toString()))) }
+                backpackingBuddyViewModel,
+                tripId,
+                onOverviewClick = {
+                    navController.navigate((TripOverviewSpec.buildRoute(tripId.toString()))) },
+                onExploreClick = {
+                    navController.navigate((TripExploreSpec.buildRoute(tripId.toString()))) }
             )
         }
+
+        //TODO:
+//        LaunchedEffect(tripId) {
+//            tripId?.let { backpackingBuddyViewModel.loadTripByUUID(it) }
+//        }
+//
+//        val trip by backpackingBuddyViewModel.currentTripState.collectAsState()
+//
+//        trip?.let {
+//            ExisitngTripItinerary(
+//                trip = it,
+//                onOverviewClick = { trip ->
+//                    navController.navigate((TripOverviewSpec.buildRoute(trip.id.toString()))) },
+//                onExploreClick = { trip ->
+//                    navController.navigate((TripExploreSpec.buildRoute(trip.id.toString()))) }
+//            )
+//        }
     }
 
     @Composable

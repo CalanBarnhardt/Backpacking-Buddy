@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -25,25 +26,35 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import pangolin.backpackingbuddy.R
-import pangolin.backpackingbuddy.data.Trip
 import pangolin.backpackingbuddy.ui.sharedComponents.AddButtonIcon
 import pangolin.backpackingbuddy.ui.sharedComponents.NavButton
 import pangolin.backpackingbuddy.ui.sharedComponents.TripNameDisplay
+import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
+import java.util.UUID
 
 @Composable
 fun ExistingTripOverviewScreen (
-    trip : Trip,
-    onExploreClick: (Trip) -> Unit,
-    onItineraryClick: (Trip) -> Unit,
+    viewModel: BackpackingBuddyViewModel,
+    tripID: UUID?,
+    onExploreClick: () -> Unit,
+    onItineraryClick: () -> Unit,
     onAddButtonClick: () -> Unit) {
-    Log.d("TripOverviewScreen", "Showing trip with ID: $trip.tripId")
+    Log.d("TripOverviewScreen", "Showing trip with ID: $tripID")
+
+    // retrieve name from trip ID
+    val tripName = tripID?.let { viewModel.getNameFromID(it).collectAsState(initial="") }
+
+    // TODO: retrieve trails from trip ID
+
     Column (modifier=
         Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally)    {
         Spacer(modifier = Modifier.size(60.dp))
 
         //trip title text header
-        TripNameDisplay(trip.tripNameId)
+        if (tripName != null) {
+            TripNameDisplay(tripName.value)
+        }
 
         Spacer(modifier = Modifier.size(16.dp))
 
@@ -52,9 +63,13 @@ fun ExistingTripOverviewScreen (
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly) {
 
-            NavButton(stringResource(R.string.overview_button), trip, {}, true);
-            NavButton(stringResource(R.string.itinerary_button), trip, onItineraryClick);
-            NavButton(stringResource(R.string.explore_button), trip, onExploreClick);
+            NavButton(stringResource(R.string.overview_button), {}, true);
+            if (tripID != null) {
+                NavButton(stringResource(R.string.itinerary_button), onItineraryClick)
+            };
+            if (tripID != null) {
+                NavButton(stringResource(R.string.explore_button), onExploreClick)
+            };
         }
 
         Spacer(modifier = Modifier.size(16.dp))
@@ -66,37 +81,42 @@ fun ExistingTripOverviewScreen (
             .clip(RoundedCornerShape(12.dp))
             .background(MaterialTheme.colorScheme.surface),
         ){
+            // TODO: retrieve trails related to tripID
             val trailsExpanded = remember { mutableStateOf<Boolean>(true) }
+
+            // TODO: retrieve campsites related to tripID
             val campsiteExpanded = remember { mutableStateOf<Boolean>(true) }
+
+            // TODO: update logic to display trails/campsites
             LazyColumn (modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)) {
                 item {
                     // trails dropdown
-                    trailsExpanded.value = OverviewDropdown(trailsExpanded.value, trip, stringResource(R.string.trail_text))
+                    trailsExpanded.value = OverviewDropdown(trailsExpanded.value, stringResource(R.string.trail_text))
                     //content for trails
-                    if (trailsExpanded.value) {
-                        trip.trails.forEach { trail ->
-                            OverviewForEach(trail)
-                        }
-                        OverviewForEach("Island Lake")
-                        OverviewForEach("Haviland Lake Trail")
-                        OverviewForEach("Rifle Falls")
-                    }
+//                    if (trailsExpanded.value) {
+//                        trip.trails.forEach { trail ->
+//                            OverviewForEach(trail)
+//                        }
+//                        OverviewForEach("Island Lake")
+//                        OverviewForEach("Haviland Lake Trail")
+//                        OverviewForEach("Rifle Falls")
+//                    }
 
 
-                        Spacer(modifier = Modifier.size(16.dp))
-
-                        // campsites dropdown
-                        campsiteExpanded.value = OverviewDropdown(campsiteExpanded.value, trip, stringResource(R.string.campsite_text))
-                        //content for trails
-                        if (trailsExpanded.value) {
-                            trip.campsites.forEach { campsite ->
-                                OverviewForEach(campsite)
-                            }
-                            OverviewForEach("Bear Campground")
-                            OverviewForEach("Aspen Campground")
-                        }
+//                        Spacer(modifier = Modifier.size(16.dp))
+//
+//                        // campsites dropdown
+//                        campsiteExpanded.value = OverviewDropdown(campsiteExpanded.value, stringResource(R.string.campsite_text))
+//                        //content for trails
+//                        if (trailsExpanded.value) {
+//                            trip.campsites.forEach { campsite ->
+//                                OverviewForEach(campsite)
+//                            }
+//                            OverviewForEach("Bear Campground")
+//                            OverviewForEach("Aspen Campground")
+//                        }
 
                 }
             }
@@ -112,5 +132,5 @@ fun ExistingTripOverviewScreen (
 @Preview
 @Composable
 fun PreviewExistingTripOverviewScreen () {
-    ExistingTripOverviewScreen(Trip("Durango", listOf("A", "B", "C"), listOf("A", "B", "C")), {}, {}, {})
+    //ExistingTripOverviewScreen(Trip("Durango", listOf("A", "B", "C"), listOf("A", "B", "C")), {}, {}, {})
 }

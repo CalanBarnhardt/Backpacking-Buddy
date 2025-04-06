@@ -19,20 +19,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.PointerIcon.Companion.Text
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import pangolin.backpackingbuddy.R
-import pangolin.backpackingbuddy.data.Trail
-import pangolin.backpackingbuddy.data.Trip
+import pangolin.backpackingbuddy.data.dataEntries.Trail
 import pangolin.backpackingbuddy.ui.sharedComponents.NavButton
 import pangolin.backpackingbuddy.ui.sharedComponents.TripNameDisplay
 
 @Composable
-fun AddItemToTrip(trip: Trip, trail: Trail, onAddNewItemClick: (Trip) -> Unit) {
+fun AddItemToTrip( trail: Trail, onAddNewItemClick: () -> Unit) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -40,7 +36,7 @@ fun AddItemToTrip(trip: Trip, trail: Trail, onAddNewItemClick: (Trip) -> Unit) {
                 .background(MaterialTheme.colorScheme.surface),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TripNameDisplay(trip.tripNameId)
+            TripNameDisplay("TEMP, name goes here")
 
             Spacer(modifier = Modifier.size(16.dp))
 
@@ -87,7 +83,7 @@ fun AddItemToTrip(trip: Trip, trail: Trail, onAddNewItemClick: (Trip) -> Unit) {
 
             Spacer(modifier = Modifier.size(24.dp))
 
-            NavButton("Add to trip!", trip, onAddNewItemClick)
+            NavButton("Add to trip!",  onAddNewItemClick)
 
         }
 }
@@ -95,5 +91,5 @@ fun AddItemToTrip(trip: Trip, trail: Trail, onAddNewItemClick: (Trip) -> Unit) {
 @Preview
 @Composable
 fun PreviewAddItemToTrip() {
-    AddItemToTrip(Trip("Durango", listOf("A", "B", "C"), listOf("A", "B", "C")), Trail("Haviland Lake Trail", "Durango", R.drawable.havilandlake, "3.8 miles, Moderate"), {})
+    //AddItemToTrip(Trip("Durango", listOf("A", "B", "C"), listOf("A", "B", "C")), Trail("Haviland Lake Trail", "Durango", R.drawable.havilandlake, "3.8 miles, Moderate"), {})
 }

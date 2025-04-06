@@ -23,20 +23,24 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
+import androidx.navigation.navArgument
 import pangolin.backpackingbuddy.R
-import pangolin.backpackingbuddy.data.Trip
 import pangolin.backpackingbuddy.ui.createTrip.CreateNewTripDate
 import pangolin.backpackingbuddy.ui.loginScreen.LoginScreen
 import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 
 
 data object CreateNewTripDateSpec : IScreenSpec{
     private const val LOG_TAG = "448.CreateNewTripDateSpec"
 
-    override val route = "trip-date"
+    override val route = "trip-date/{tripName}"
     override val title = R.string.app_name
-    override val arguments: List<NamedNavArgument> = emptyList()
-    override fun buildRoute(vararg args: String?) = route
+    override val arguments: List<NamedNavArgument> = listOf(
+        navArgument("tripName") { defaultValue = ""; nullable = false }
+    )
+    override fun buildRoute(vararg args: String?) = "trip-date/${args.firstOrNull() ?: ""}"
 
     @Composable
     override fun Content(
@@ -46,15 +50,11 @@ data object CreateNewTripDateSpec : IScreenSpec{
         navBackStackEntry: NavBackStackEntry,
         context: Context
     ) {
-        val trip = Trip(
-            tripNameId = "Big Sky",
-            trails = emptyList(),
-            campsites = emptyList(),
-        )
 
-        CreateNewTripDate(trip, onGetStarted = { trip ->
-            navController.navigate(ProfileScreenSpec.route)
-        })
+        val encodedTripName = navBackStackEntry.arguments?.getString("tripName") ?: ""
+        val tripName = URLDecoder.decode(encodedTripName, StandardCharsets.UTF_8.toString())
+
+        CreateNewTripDate(backpackingBuddyViewModel, tripName, onGetStarted = { navController.navigate(ProfileScreenSpec.route) })
 
 //        val trip by backpackingBuddyViewModel.currentTripState.collectAsState()
 //
