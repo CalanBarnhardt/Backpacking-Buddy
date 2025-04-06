@@ -9,13 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -24,33 +20,17 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import pangolin.backpackingbuddy.R
-import pangolin.backpackingbuddy.ui.tripExplore.ExistingTripExploreScreen
+import pangolin.backpackingbuddy.ui.TrailScreen
+import pangolin.backpackingbuddy.ui.exploreScreen.ExploreScreen
 import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
-import java.util.UUID
 
+object TrailScreenSpec : IScreenSpec {
+    private const val LOG_TAG = "448.TrailScreenSpec"
 
-data object TripExploreSpec : IScreenSpec {
-    override val arguments: List<NamedNavArgument> = emptyList()
-
-    private const val ROUTE_BASE = "trip_explore"
-    private const val ARG_UUID_NAME = "uuid"
-
-    private fun buildFullRoute(argVal: String): String {
-        var fullRoute = ROUTE_BASE
-        if(argVal == ARG_UUID_NAME) {
-            fullRoute += "/{$argVal}"
-            //Log.d(LOG_TAG, "Built base route $fullRoute")
-        } else {
-            fullRoute += "/$argVal"
-            //Log.d(LOG_TAG, "Built specific route $fullRoute")
-        }
-        return fullRoute
-    }
-
-    override val route = buildFullRoute(ARG_UUID_NAME)
+    override val route = "trailScreen"
     override val title = R.string.app_name
-
-    override fun buildRoute(vararg args: String?): String = buildFullRoute(args[0] ?: "0")
+    override val arguments: List<NamedNavArgument> = emptyList()
+    override fun buildRoute(vararg args: String?) = route
 
     @Composable
     override fun Content(
@@ -60,32 +40,7 @@ data object TripExploreSpec : IScreenSpec {
         navBackStackEntry: NavBackStackEntry,
         context: Context
     ) {
-        val uuidString = navBackStackEntry.arguments?.getString(ARG_UUID_NAME)
-        val tripId = uuidString?.let { UUID.fromString(it) }
-
-        LaunchedEffect(tripId) {
-            tripId?.let { backpackingBuddyViewModel.loadTripByUUID(it) }
-        }
-
-        val trip by backpackingBuddyViewModel.currentTripState.collectAsState()
-
-        trip?.let {
-            ExistingTripExploreScreen(
-                trip = it,
-                onOverviewClick = { trip ->
-                    navController.navigate((TripOverviewSpec.buildRoute(trip.id.toString())))
-                },
-                onItineraryClick = { trip ->
-                    navController.navigate((TripItinerarySpec.buildRoute(trip.id.toString())))
-                },
-                onAddButtonClick = {
-                    navController.navigate(AddItemToTripSpec.route)
-                },
-                onHitSearch = { trip ->
-                    navController.navigate(TrailScreenSpec.route)
-                }
-            )
-        }
+        TrailScreen(backpackingBuddyViewModel)
     }
 
     @Composable
@@ -112,14 +67,12 @@ data object TripExploreSpec : IScreenSpec {
             Spacer(Modifier.padding(40.dp))
 
             IconButton(onClick = {
-                navController.navigate(ExploreScreenSpec.route)
+//                navController.navigate(ExploreScreenSpec.route)
             }) {
                 Image(
                     painter = painterResource(id = R.drawable.compass_icon),
                     contentDescription = "Compass Icon"
                 )
             }
-        }
-    }
-
+        }    }
 }

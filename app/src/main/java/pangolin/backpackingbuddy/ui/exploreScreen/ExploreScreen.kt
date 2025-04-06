@@ -35,6 +35,7 @@ fun ExploreScreen() {
             SearchBar() // search bar will hold trails and campsites
         }
 
+
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPosition

@@ -1,6 +1,9 @@
 package pangolin.backpackingbuddy.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
@@ -12,7 +15,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import pangolin.backpackingbuddy.data.Element
 import pangolin.backpackingbuddy.data.Trip
+import pangolin.backpackingbuddy.data.network.RetrofitClient
 import java.util.UUID
 
 class BackpackingBuddyViewModel(private val mTrips : List<Trip>): ViewModel() {
@@ -175,6 +180,39 @@ class BackpackingBuddyViewModel(private val mTrips : List<Trip>): ViewModel() {
         _signinPassword.value = ""
         _signinIsLoading.value = false
         _signinError.value = null
+    }
+
+    var trailData by mutableStateOf<List<Element>>(emptyList())
+        private set
+
+    var errorMessage by mutableStateOf<String?>(null)
+        private set
+
+    fun loadTrails() {
+        val query = """
+        [out:json][timeout:60];
+        (
+          way["highway"="path"]["sac_scale"="hiking"](38.6,-106.0,40.9,-104.6);
+          node(w);
+        );
+        out body;
+        >;
+        out skel qt;
+    """.trimIndent()
+
+        viewModelScope.launch {
+            try {
+                val response = RetrofitClient.instance.queryOverpass(query)
+                if (response.isSuccessful) {
+                    trailData = response.body()?.elements ?: emptyList()
+                } else {
+                    errorMessage = "Error: ${response.code()}"
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                errorMessage = "Failed: ${e.message ?: "Unknown error"}"
+            }
+        }
     }
 
 }

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -38,7 +39,8 @@ fun ExistingTripExploreScreen(
     trip: Trip,
     onOverviewClick: (Trip) -> Unit,
     onItineraryClick: (Trip) -> Unit,
-    onAddButtonClick: () -> Unit) {
+    onAddButtonClick: () -> Unit,
+    onHitSearch: (Trip) -> Unit) {
 
     val searchResults = listOf(Trail("Island Lake", "Durango", R.drawable.islandlake ), Trail("Haviland Lake Trail", "Durango", R.drawable.havilandlake, "3.8 miles, Moderate"))
 
@@ -64,6 +66,12 @@ fun ExistingTripExploreScreen(
 
         // search bar
         SearchBar()
+        Button(
+            onClick = { onHitSearch(trip) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Search Trails")
+        }
 
         // trail cards
         LazyColumn {
@@ -140,5 +148,5 @@ fun ExistingTripExploreScreen(
 @Preview
 @Composable
 fun PreviewExisitingTripExploreScreen () {
-    ExistingTripExploreScreen(Trip("Durango", listOf("A", "B", "C"), listOf("A", "B", "C")), {}, {}, {})
+    ExistingTripExploreScreen(Trip("Durango", listOf("A", "B", "C"), listOf("A", "B", "C")), {}, {}, {}, {})
 }

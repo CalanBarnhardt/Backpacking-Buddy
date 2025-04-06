@@ -75,12 +75,18 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    //firebase
+    // firebase
 //    implementation(platform(libs.firebase.bom))
 //    implementation(libs.firebase.auth.ktx)
 //    implementation(libs.firebase.firestore.ktx)
     implementation(platform("com.google.firebase:firebase-bom:33.12.0"))
     implementation("com.google.firebase:firebase-analytics")
+
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0") // Retrofit core
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0") // Retrofit with Gson converter for JSON
+//    implementation ("com.squareup.retrofit2:retrofit-coroutines:2.9.0")
+//    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+    implementation("com.google.maps.android:maps-compose:2.11.2")
 
 
     //other stuff
