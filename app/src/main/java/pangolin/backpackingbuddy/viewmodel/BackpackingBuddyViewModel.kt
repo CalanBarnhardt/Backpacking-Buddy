@@ -18,6 +18,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import pangolin.backpackingbuddy.data.Element
+import pangolin.backpackingbuddy.data.dataEntries.Trail
+import pangolin.backpackingbuddy.data.dataEntries.Trips
+import pangolin.backpackingbuddy.data.database.TripDates
 import pangolin.backpackingbuddy.data.network.RetrofitClient
 import java.util.Date
 import java.util.UUID
@@ -62,6 +65,21 @@ class BackpackingBuddyViewModel(private val backpackingBuddyRepo : BackpackingBu
             backpackingBuddyRepo.addTrip(tripName, start_date, end_date)
         }
     }
+
+    fun getTripDates(tripId: UUID): Flow<TripDates> {
+        return backpackingBuddyRepo.getTripDates(tripId)
+    }
+
+    fun getAllTrips(): Flow<List<Trips>> = backpackingBuddyRepo.getAllTrips()
+
+    fun addTrailToTrip(trail: Trail, tripId: UUID) {
+        viewModelScope.launch {
+            backpackingBuddyRepo.addTrail(trail, tripId)
+        }
+    }
+
+    fun getTrailsForTrip(tripId: UUID): Flow<List<Trail>> =
+        backpackingBuddyRepo.getTrailsForTrip(tripId)
 
     //====================================================================================================================
     // SIGNUP SCREEN OPERATIONS
@@ -198,7 +216,7 @@ class BackpackingBuddyViewModel(private val backpackingBuddyRepo : BackpackingBu
 
     fun loadTrails() {
         val query = """
-        [out:json][timeout:60];
+        [out:json][timeout:120];
         (
           way["highway"="path"]["sac_scale"="hiking"](38.6,-106.0,40.9,-104.6);
           node(w);

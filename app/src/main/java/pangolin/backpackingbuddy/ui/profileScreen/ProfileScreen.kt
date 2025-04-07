@@ -41,7 +41,7 @@ import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
 
 @Composable
 fun ProfileScreen(viewModel: BackpackingBuddyViewModel, onCreateTrip: () -> Unit, onExistingTrip: (String) -> Unit, onSignout: () -> Unit,
-                  onSearch: () -> Unit) {
+                  ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -95,15 +95,6 @@ fun ProfileScreen(viewModel: BackpackingBuddyViewModel, onCreateTrip: () -> Unit
         Divider(modifier = Modifier.fillMaxWidth(0.7f))
 
         Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = { onSearch() },
-            modifier = Modifier.fillMaxWidth(0.8f),
-            shape = MaterialTheme.shapes.medium,
-            contentPadding = PaddingValues(16.dp)
-        ) {
-            Text("Search Trails")
-        }
 
         // displays a button for each existing trip
 

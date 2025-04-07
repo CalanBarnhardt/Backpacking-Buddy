@@ -11,7 +11,7 @@ import pangolin.backpackingbuddy.data.dataEntries.Trips
 
 @Database(
     entities = [Trips::class, Trail::class, TripTrailRef::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(DataConverter::class)
@@ -25,8 +25,9 @@ abstract class BackpackingBuddyDatabase : RoomDatabase() {
             synchronized(this) {
                 var instance = INSTANCE
                 if(instance == null) {
+                    // fallbackToDestrcutiveMigration good for dev, not production, perhaps want to fix this later
                     instance = Room.databaseBuilder(context, BackpackingBuddyDatabase::class.java,
-                        "backpacking-buddy-database").build()
+                        "backpacking-buddy-database").fallbackToDestructiveMigration().build()
                     INSTANCE = instance
                 }
                 return instance

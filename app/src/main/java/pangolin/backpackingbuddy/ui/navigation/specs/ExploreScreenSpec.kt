@@ -40,7 +40,11 @@ object ExploreScreenSpec : IScreenSpec {
         navBackStackEntry: NavBackStackEntry,
         context: Context
     ) {
-        ExploreScreen()
+        ExploreScreen(
+            onHitSearch = {
+                navController.navigate(TrailScreenSpec.route)
+            }
+        )
     }
 
     @Composable

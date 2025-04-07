@@ -35,8 +35,11 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.rememberCameraPositionState
 import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import java.util.UUID
-
+import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
 fun ExisitngTripItinerary (
@@ -95,8 +98,26 @@ fun ExisitngTripItinerary (
             .clip(RoundedCornerShape(12.dp))
             .background(MaterialTheme.colorScheme.surface))
         {
-            val accessingDate = remember { mutableStateOf<String>("6/28") }
-            val dates = listOf("6/28", "6/29", "6/30")
+            val accessingDate = remember { mutableStateOf("6/28") }
+            val tripDates = viewModel.getTripDates(tripId).collectAsState(initial = null)
+
+            val dateFormatter = remember { SimpleDateFormat("MM/dd", Locale.getDefault()) }
+
+            val dates = remember(tripDates.value) {
+                tripDates.value?.let { (start, end) ->
+                    val list = mutableListOf<String>()
+                    val calendar = Calendar.getInstance().apply { time = start }
+                    val endCalendar = Calendar.getInstance().apply { time = end }
+
+                    while (!calendar.after(endCalendar)) {
+                        list.add(dateFormatter.format(calendar.time))
+                        calendar.add(Calendar.DATE, 1)
+                    }
+
+                    list
+                } ?: emptyList()
+            }
+
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -106,23 +127,25 @@ fun ExisitngTripItinerary (
                     Column {
                         Text(text = "Trip Dates:")
                         Spacer(modifier = Modifier.size(8.dp))
-                        //list dates
-                        Row (modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(end = 5.dp))   {
-                            dates.forEachIndexed { index, date ->
-                                Text(text = date)
-                                if (index < dates.size - 1) {
-                                    Spacer(modifier = Modifier.width(8.dp))
-                                }
+
+                        FlowRow(
+                            mainAxisSpacing = 8.dp,
+                            crossAxisSpacing = 8.dp,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(end = 5.dp)
+                        ) {
+                            dates.forEach { date ->
+                                Text(
+                                    text = date,
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
                             }
                         }
-                        Spacer(modifier = Modifier.size(24.dp))
 
-                        //list information for date
+                        Spacer(modifier = Modifier.size(24.dp))
                         Text(text = "Information about trail/campsites/itinerary here")
                     }
-
                 }
             }
         }

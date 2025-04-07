@@ -89,10 +89,10 @@ dependencies {
 
     implementation ("com.squareup.retrofit2:retrofit:2.9.0") // Retrofit core
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0") // Retrofit with Gson converter for JSON
-//    implementation ("com.squareup.retrofit2:retrofit-coroutines:2.9.0")
-//    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+
     implementation("com.google.maps.android:maps-compose:2.11.2")
 
+    implementation("com.google.accompanist:accompanist-flowlayout:0.30.1") // for row overflow formatting
 
     //other stuff
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0") // Check for latest version

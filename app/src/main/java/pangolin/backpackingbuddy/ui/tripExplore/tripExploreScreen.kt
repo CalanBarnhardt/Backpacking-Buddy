@@ -69,8 +69,19 @@ fun ExistingTripExploreScreen(
             NavButton(stringResource(R.string.explore_button), {}, true);
         }
 
-        // search bar
+        Spacer(modifier = Modifier.size(24.dp))
+
         SearchBar()
+
+        Spacer(modifier = Modifier.size(24.dp))
+
+        // placeholder
+        Text("Searching is not yet implemented. To view trails in the Front Range, click 'Search Trails.'")
+        Spacer(modifier = Modifier.size(24.dp))
+        Text("To add a trail to a trip, select a trail on the map.")
+
+        Spacer(modifier = Modifier.size(24.dp))
+
         Button(
             onClick = { onHitSearch() },
             modifier = Modifier.fillMaxWidth()

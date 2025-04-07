@@ -2,7 +2,9 @@ package pangolin.backpackingbuddy.data.database
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
 import pangolin.backpackingbuddy.data.dataEntries.Trail
 import pangolin.backpackingbuddy.data.dataEntries.TripTrailRef
@@ -34,6 +36,26 @@ interface BackpackingBuddyDao {
     @Query ("SELECT trip_name FROM Trips WHERE trip_id = :id")
     fun getNameFromID(id: UUID): Flow<String>
 
+    @Query("SELECT start_date, end_date FROM Trips WHERE trip_id = :tripId")
+    fun getTripDates(tripId: UUID): Flow<TripDates>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertTrail(trail: Trail)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertTripTrailCrossRef(ref: TripTrailRef)
+
+    @Query("SELECT * FROM trips")
+    fun getAllTrips(): Flow<List<Trips>>
+
+    @Transaction
+    @Query("""
+    SELECT * FROM trails
+    INNER JOIN TripTrailRef ON trails.trail_id = TripTrailRef.trailId
+    WHERE TripTrailRef.tripId = :tripId
+    """)
+    fun getTrailsForTrip(tripId: UUID): Flow<List<Trail>>
+
     // add a trail to the trails and return id
     @Insert
     suspend fun addTrail(trail: Trail): Long
@@ -64,3 +86,8 @@ interface BackpackingBuddyDao {
 
 
 }
+
+data class TripDates(
+    val start_date: Date,
+    val end_date: Date
+)

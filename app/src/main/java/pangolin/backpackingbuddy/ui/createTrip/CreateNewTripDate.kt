@@ -114,7 +114,7 @@ fun CreateNewTripDate(viewModel: BackpackingBuddyViewModel,
             onGetStarted()
         }
 
-        NavButton(stringResource(id = R.string.get_started), lambda)
+        NavButton("Create Trip", lambda)
 
 //        Button(
 //            onClick = { lambda },
