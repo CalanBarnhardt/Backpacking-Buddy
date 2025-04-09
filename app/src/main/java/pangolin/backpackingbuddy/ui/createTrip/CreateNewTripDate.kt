@@ -58,6 +58,7 @@ fun CreateNewTripDate(viewModel: BackpackingBuddyViewModel,
             .padding(16.dp)
             .background(MaterialTheme.colorScheme.background)
     ) {
+
         Text(
             text = "When will this trip be?",
             style = MaterialTheme.typography.titleLarge
