@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import pangolin.backpackingbuddy.data.Element
+import pangolin.backpackingbuddy.data.dataEntries.Campsite
 import pangolin.backpackingbuddy.data.dataEntries.Trail
 import pangolin.backpackingbuddy.data.dataEntries.Trips
 import pangolin.backpackingbuddy.data.database.TripDates
@@ -78,8 +79,18 @@ class BackpackingBuddyViewModel(private val backpackingBuddyRepo : BackpackingBu
         }
     }
 
+    fun addCampsiteToTrip(campsite: Campsite, tripId: UUID) {
+        viewModelScope.launch {
+            backpackingBuddyRepo.addCampsite(campsite, tripId)
+        }
+    }
+
     fun getTrailsForTrip(tripId: UUID): Flow<List<Trail>> =
         backpackingBuddyRepo.getTrailsForTrip(tripId)
+
+    fun getCampsitesForTrip(tripId: UUID): Flow<List<Campsite>> {
+        return backpackingBuddyRepo.getCampsitesForTrip(tripId)
+    }
 
     //====================================================================================================================
     // SIGNUP SCREEN OPERATIONS
@@ -211,6 +222,9 @@ class BackpackingBuddyViewModel(private val backpackingBuddyRepo : BackpackingBu
     var trailData by mutableStateOf<List<Element>>(emptyList())
         private set
 
+    var campsiteData by mutableStateOf<List<Element>>(emptyList())
+        private set
+
     var errorMessage by mutableStateOf<String?>(null)
         private set
 
@@ -233,6 +247,33 @@ class BackpackingBuddyViewModel(private val backpackingBuddyRepo : BackpackingBu
                 val response = RetrofitClient.instance.queryOverpass(query)
                 if (response.isSuccessful) {
                     trailData = response.body()?.elements ?: emptyList()
+                } else {
+                    errorMessage = "Error: ${response.code()}"
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                errorMessage = "Failed: ${e.message ?: "Unknown error"}"
+            }
+        }
+    }
+
+    fun loadCampsites(lat: Double, lon: Double) {
+        val boundLat: Double = lat + 2.0
+        val boundLon: Double = lon + 1.0
+
+        val query = """
+        [out:json][timeout:25];
+        nwr["tourism"="camp_site"]($lat,$lon,$boundLat,$boundLon);
+        out body;
+        >;
+        out skel qt;
+        """.trimIndent()
+
+        viewModelScope.launch {
+            try {
+                val response = RetrofitClient.instance.queryOverpass(query)
+                if (response.isSuccessful) {
+                    campsiteData = response.body()?.elements ?: emptyList()
                 } else {
                     errorMessage = "Error: ${response.code()}"
                 }

@@ -5,13 +5,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import pangolin.backpackingbuddy.data.dataEntries.Campsite
 import pangolin.backpackingbuddy.data.dataEntries.Trail
+import pangolin.backpackingbuddy.data.dataEntries.TripCampsiteRef
 import pangolin.backpackingbuddy.data.dataEntries.TripTrailRef
 import pangolin.backpackingbuddy.data.dataEntries.Trips
 
 @Database(
-    entities = [Trips::class, Trail::class, TripTrailRef::class],
-    version = 2,
+    entities = [Trips::class, Trail::class, TripTrailRef::class, Campsite::class, TripCampsiteRef::class],
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(DataConverter::class)

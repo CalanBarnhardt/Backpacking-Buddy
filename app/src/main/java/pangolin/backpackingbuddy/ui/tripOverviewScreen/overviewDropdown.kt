@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import pangolin.backpackingbuddy.data.dataEntries.Campsite
 import pangolin.backpackingbuddy.data.dataEntries.Trail
 import pangolin.backpackingbuddy.ui.sharedComponents.BulletPoint
 import pangolin.backpackingbuddy.ui.sharedComponents.ExpandableIcon
@@ -45,6 +46,29 @@ fun OverviewDropdown(
         Icon(
             imageVector = if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
             contentDescription = null
+        )
+    }
+}
+
+@Composable
+fun CampsiteOverviewItem(campsite: Campsite) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .background(MaterialTheme.colorScheme.secondaryContainer)
+            .padding(12.dp)
+    ) {
+        Text(
+            text = campsite.name,
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSecondaryContainer
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = "Lat: %.2f, Lon: %.2f".format(campsite.lat, campsite.lon),
+            style = MaterialTheme.typography.bodySmall
         )
     }
 }

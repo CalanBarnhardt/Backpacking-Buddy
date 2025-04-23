@@ -57,7 +57,8 @@ fun ExistingTripExploreScreen(
     onOverviewClick: () -> Unit,
     onItineraryClick: () -> Unit,
     onAddButtonClick: () -> Unit,
-    onHitSearch: (Double, Double) -> Unit){
+    onHitTrailSearch: (Double, Double) -> Unit,
+    onHitCampsiteSearch: (Double, Double) -> Unit){
 
     val tripName = viewModel.getNameFromID(tripId).collectAsState(initial = "")
 
@@ -89,10 +90,13 @@ fun ExistingTripExploreScreen(
         }
 
         Spacer(modifier = Modifier.size(24.dp))
+        Text("Select a location on the map and hit \"Search Trails\" or \"Search Campsites\" to view trails or campsites in that area!")
+        Spacer(modifier = Modifier.size(24.dp))
+
         Box(
             modifier = Modifier
                 .fillMaxWidth(0.9f)
-                .height(200.dp)
+                .height(250.dp)
                 .background(MaterialTheme.colorScheme.tertiary),
             contentAlignment = Alignment.Center
         ) {
@@ -117,15 +121,30 @@ fun ExistingTripExploreScreen(
             }
         }
 
+        Spacer(modifier = Modifier.size(24.dp))
+
         Button(
             onClick = {
                 selectedLatLngState.value?.let { latLng ->
-                    onHitSearch(latLng.latitude, latLng.longitude)
+                    onHitTrailSearch(latLng.latitude, latLng.longitude)
                 }
             },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Search Trails")
+        }
+
+        Spacer(modifier = Modifier.size(24.dp))
+
+        Button(
+            onClick = {
+                selectedLatLngState.value?.let { latLng ->
+                    onHitCampsiteSearch(latLng.latitude, latLng.longitude)
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Search Campsites")
         }
 
     }

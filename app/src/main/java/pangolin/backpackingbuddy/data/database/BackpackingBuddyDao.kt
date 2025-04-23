@@ -6,7 +6,9 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
+import pangolin.backpackingbuddy.data.dataEntries.Campsite
 import pangolin.backpackingbuddy.data.dataEntries.Trail
+import pangolin.backpackingbuddy.data.dataEntries.TripCampsiteRef
 import pangolin.backpackingbuddy.data.dataEntries.TripTrailRef
 import pangolin.backpackingbuddy.data.dataEntries.Trips
 import java.util.Date
@@ -45,6 +47,9 @@ interface BackpackingBuddyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTripTrailCrossRef(ref: TripTrailRef)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertTripCampsiteRef(ref: TripCampsiteRef)
+
     @Query("SELECT * FROM trips")
     fun getAllTrips(): Flow<List<Trips>>
 
@@ -55,6 +60,15 @@ interface BackpackingBuddyDao {
     WHERE TripTrailRef.tripId = :tripId
     """)
     fun getTrailsForTrip(tripId: UUID): Flow<List<Trail>>
+
+    @Transaction
+    @Query("""
+    SELECT * FROM campsites
+    INNER JOIN TripCampsiteRef ON campsites.campsite_id = TripCampsiteRef.campsiteId
+    WHERE TripCampsiteRef.tripId = :tripId
+    """)
+    fun getCampsitesForTrip(tripId: UUID): Flow<List<Campsite>>
+
 
     // add a trail to the trails and return id
     @Insert
@@ -79,6 +93,9 @@ interface BackpackingBuddyDao {
     // access specific trail information based on key
     @Query("SELECT * FROM trails WHERE trail_Id = :trailId")
     suspend fun getTrailById(trailId: Long): Trail?
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertCampsite(campsite: Campsite)
 
     // TODO: delete a trip
 

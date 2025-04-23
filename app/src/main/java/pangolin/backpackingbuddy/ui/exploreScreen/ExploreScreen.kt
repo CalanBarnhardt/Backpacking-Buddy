@@ -43,15 +43,6 @@ fun ExploreScreen(onHitSearch: () -> Unit) {
             color = MaterialTheme.colorScheme.primary
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "Searching is not yet implemented, but you can view Front Range trails by hitting “Search Trails” below.",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            lineHeight = 20.sp
-        )
-
         Spacer(modifier = Modifier.height(32.dp))
 
         Row(
@@ -60,14 +51,6 @@ fun ExploreScreen(onHitSearch: () -> Unit) {
             SearchBar() // search bar will hold trails and campsites
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = { onHitSearch() },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Search Trails")
-        }
         
         Spacer(modifier = Modifier.height(16.dp))
 

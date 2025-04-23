@@ -27,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import pangolin.backpackingbuddy.R
+import pangolin.backpackingbuddy.data.dataEntries.Campsite
 import pangolin.backpackingbuddy.ui.sharedComponents.AddButtonIcon
 import pangolin.backpackingbuddy.ui.sharedComponents.NavButton
 import pangolin.backpackingbuddy.ui.sharedComponents.TripNameDisplay
@@ -45,6 +46,7 @@ fun ExistingTripOverviewScreen(
     val tripName = tripID?.let { viewModel.getNameFromID(it).collectAsState(initial = "") }
 
     val trails = tripID?.let { viewModel.getTrailsForTrip(it).collectAsState(initial = emptyList()) }
+    val campsites = tripID?.let { viewModel.getCampsitesForTrip(it).collectAsState(initial = emptyList()) }
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -114,7 +116,13 @@ fun ExistingTripOverviewScreen(
                     )
 
                     if (campsiteExpanded.value) {
-                        OverviewForEach("No campsite data yet...")
+                        if (campsites != null && campsites.value.isNotEmpty()) {
+                            campsites.value.forEach { campsite ->
+                                CampsiteOverviewItem(campsite)
+                            }
+                        } else {
+                            Text("No campsites added yet.", style = MaterialTheme.typography.bodyMedium)
+                        }
                     }
                 }
             }

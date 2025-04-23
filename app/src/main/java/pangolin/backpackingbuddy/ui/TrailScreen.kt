@@ -31,7 +31,7 @@ fun TrailScreen(viewModel: BackpackingBuddyViewModel, lat: Double, lon: Double) 
     var trailToAdd by remember { mutableStateOf<Trail?>(null) }
 
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(LatLng(39.755, -105.221), 13f)
+        position = CameraPosition.fromLatLngZoom(LatLng(lat, lon), 13f)
     }
 
     var selectedTrailName by remember { mutableStateOf<String?>(null) }
@@ -67,7 +67,7 @@ fun TrailScreen(viewModel: BackpackingBuddyViewModel, lat: Double, lon: Double) 
                             selectedTrailName = way.tags?.get("name")
                             trailToAdd = Trail(
                                 name = way.tags?.get("name") ?: "Unnamed Trail",
-                                location = "CO",
+                                location = "Lat: %.2f, Lon: %.2f".format(lat, lon),
                                 photo = R.drawable.havilandlake, // filler
                                 distance = polylinePoints.size, // placeholder
                             )
@@ -77,7 +77,6 @@ fun TrailScreen(viewModel: BackpackingBuddyViewModel, lat: Double, lon: Double) 
             }
         }
 
-        // TODO: add button "add trail to trip"
         selectedTrailName?.let { name ->
             Snackbar(
                 modifier = Modifier

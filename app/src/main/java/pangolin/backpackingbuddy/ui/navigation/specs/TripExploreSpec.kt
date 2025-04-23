@@ -74,9 +74,18 @@ data object TripExploreSpec : IScreenSpec {
                 onAddButtonClick = {
                     navController.navigate(AddItemToTripSpec.route)
                 },
-                onHitSearch = { lat, lon ->
+                onHitTrailSearch = { lat, lon ->
                     navController.navigate(
                         TrailScreenSpec.buildRoute(
+                            tripId.toString(),
+                            lat.toString(),
+                            lon.toString()
+                        )
+                    )
+                },
+                onHitCampsiteSearch = {lat, lon ->
+                    navController.navigate(
+                        CampsiteScreenSpec.buildRoute(
                             tripId.toString(),
                             lat.toString(),
                             lon.toString()

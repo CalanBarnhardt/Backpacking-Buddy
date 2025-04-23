@@ -4,7 +4,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import pangolin.backpackingbuddy.data.dataEntries.Campsite
 import pangolin.backpackingbuddy.data.dataEntries.Trail
+import pangolin.backpackingbuddy.data.dataEntries.TripCampsiteRef
 import pangolin.backpackingbuddy.data.dataEntries.TripTrailRef
 import pangolin.backpackingbuddy.data.dataEntries.Trips
 import pangolin.backpackingbuddy.data.database.BackpackingBuddyDao
@@ -61,4 +63,15 @@ class BackpackingBuddyRepo private constructor(private val backpackingBuddyDao: 
 
     fun getTrailsForTrip(tripId: UUID): Flow<List<Trail>> =
         backpackingBuddyDao.getTrailsForTrip(tripId)
+
+    suspend fun addCampsite(campsite: Campsite, tripId: UUID) {
+        backpackingBuddyDao.insertCampsite(campsite)
+        backpackingBuddyDao.insertTripCampsiteRef(
+            TripCampsiteRef(tripId = tripId, campsiteId = campsite.campsite_id)
+        )
+    }
+
+    fun getCampsitesForTrip(tripId: UUID): Flow<List<Campsite>> =
+        backpackingBuddyDao.getCampsitesForTrip(tripId)
+
 }
