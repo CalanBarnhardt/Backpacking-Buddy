@@ -1,36 +1,50 @@
 package pangolin.backpackingbuddy.ui.tripExplore
 
-import androidx.compose.foundation.Image
+import android.util.Log
+import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Snackbar
+import androidx.compose.ui.Modifier
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.ui.Alignment.Companion
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.Polyline
+import com.google.maps.android.compose.rememberCameraPositionState
 import pangolin.backpackingbuddy.R
 import pangolin.backpackingbuddy.data.dataEntries.Trail
-import pangolin.backpackingbuddy.ui.sharedComponents.AddButtonIcon
-import pangolin.backpackingbuddy.ui.sharedComponents.BulletPoint
 import pangolin.backpackingbuddy.ui.sharedComponents.NavButton
-import pangolin.backpackingbuddy.ui.sharedComponents.SearchBar
 import pangolin.backpackingbuddy.ui.sharedComponents.TripNameDisplay
 import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
 import java.util.UUID
@@ -43,18 +57,23 @@ fun ExistingTripExploreScreen(
     onOverviewClick: () -> Unit,
     onItineraryClick: () -> Unit,
     onAddButtonClick: () -> Unit,
-    onHitSearch: () -> Unit){
+    onHitSearch: (Double, Double) -> Unit){
 
     val tripName = viewModel.getNameFromID(tripId).collectAsState(initial = "")
 
+    val selectedLatLngState = remember { mutableStateOf<LatLng?>(null) }
+    val mapReadyState = remember { mutableStateOf(false) } // for completeness
+    val cameraPosition = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(LatLng(0.0, 0.0), 0f)
+    }
+
     Column (modifier = Modifier
         .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally){
+        horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.size(55.dp))
 
-
         // trip name display
-       TripNameDisplay(tripName.value)
+        TripNameDisplay(tripName.value)
 
         Spacer(modifier = Modifier.size(16.dp))
 
@@ -70,100 +89,50 @@ fun ExistingTripExploreScreen(
         }
 
         Spacer(modifier = Modifier.size(24.dp))
-
-        SearchBar()
-
-        Spacer(modifier = Modifier.size(24.dp))
-
-        // placeholder
-        Text("Searching is not yet implemented. To view trails in the Front Range, click 'Search Trails.'")
-        Spacer(modifier = Modifier.size(24.dp))
-        Text("To add a trail to a trip, select a trail on the map.")
-
-        Spacer(modifier = Modifier.size(24.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .height(200.dp)
+                .background(MaterialTheme.colorScheme.tertiary),
+            contentAlignment = Alignment.Center
+        ) {
+            GoogleMap(
+                modifier = Modifier.fillMaxSize(),
+                cameraPositionState = cameraPosition,
+                onMapLoaded = { mapReadyState.value = true },
+                onMapClick = { latLng ->
+                    Log.d("MapClick", "Clicked at: ${latLng.latitude}, ${latLng.longitude}")
+                    selectedLatLngState.value = latLng
+                },
+                uiSettings = MapUiSettings(),
+                properties = MapProperties()
+            ) {
+                selectedLatLngState.value?.let { selected ->
+                    Marker(
+                        state = MarkerState(position = selected),
+                        title = "Selected Location",
+                        snippet = "${selected.latitude}, ${selected.longitude}"
+                    )
+                }
+            }
+        }
 
         Button(
-            onClick = { onHitSearch() },
+            onClick = {
+                selectedLatLngState.value?.let { latLng ->
+                    onHitSearch(latLng.latitude, latLng.longitude)
+                }
+            },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Search Trails")
         }
 
-        // trail cards
-        //TODO: add actual search results
-//        LazyColumn {
-//            item {
-//                searchResults.forEach { trail ->
-//                    Box (modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(top=16.dp)) {
-//
-//                        Box (modifier=Modifier
-//                            .offset((-30.dp), (3.dp))
-//                            .align(Alignment.TopEnd)
-//                            .zIndex(1f))
-//                            { AddButtonIcon(onAddButtonClick, MaterialTheme.colorScheme.onSecondary) }
-//
-//                        Card (modifier = Modifier
-//                            .fillMaxWidth(0.8f)
-//                            .padding(top=16.dp)
-//                            .align(Alignment.Center)) {
-//                            Row(
-//                                modifier = Modifier
-//                                    .fillMaxWidth()
-//
-//                            ) {
-//                                Column(
-//                                    modifier = Modifier
-//                                        .fillMaxHeight()
-//                                        .padding(5.dp)
-//                                        .padding(top = 5.dp)
-//                                        .weight(1f)
-//                                ) {
-//
-//                                    Text(
-//                                        text = trail.name
-//                                    )
-//                                    Row(
-//                                        modifier = Modifier
-//                                            .fillMaxWidth()
-//                                            .padding(5.dp)
-//                                    ) {
-//                                        BulletPoint()
-//                                        Text(
-//                                            text = trail.location
-//                                        )
-//
-//                                    }
-//                                    if (trail.description != null) {
-//                                        Text(
-//                                            text = trail.description,
-//                                            modifier = Modifier
-//                                                .fillMaxWidth()
-//                                                .padding(start = 8.dp)
-//                                                .padding(bottom = 5.dp)
-//                                        )
-//                                    }
-//                                }
-//                                Image(
-//                                    painter = painterResource(id = trail.photo),
-//                                    contentDescription = "Trail Photo",
-//                                    modifier = Modifier
-//                                        .fillMaxWidth(0.4f)
-//                                        .padding(top = 10.dp)
-//                                        .padding(bottom = 10.dp)
-//                                )
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
     }
 }
 
-@Preview
-@Composable
-fun PreviewExisitingTripExploreScreen () {
-    //ExistingTripExploreScreen(Trip("Durango", listOf("A", "B", "C"), listOf("A", "B", "C")), {}, {}, {})
-}
+//@Preview
+//@Composable
+//fun PreviewExisitingTripExploreScreen () {
+//    //ExistingTripExploreScreen(Trip("Durango", listOf("A", "B", "C"), listOf("A", "B", "C")), {}, {}, {})
+//}

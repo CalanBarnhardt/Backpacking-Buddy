@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import pangolin.backpackingbuddy.R
 import pangolin.backpackingbuddy.ui.tripExplore.ExistingTripExploreScreen
 import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
@@ -30,27 +32,21 @@ import java.util.UUID
 
 
 data object TripExploreSpec : IScreenSpec {
-    override val arguments: List<NamedNavArgument> = emptyList()
-
-    private const val ROUTE_BASE = "trip_explore"
     private const val ARG_UUID_NAME = "uuid"
+    private const val ROUTE_BASE = "trip_explore"
 
-    private fun buildFullRoute(argVal: String): String {
-        var fullRoute = ROUTE_BASE
-        if(argVal == ARG_UUID_NAME) {
-            fullRoute += "/{$argVal}"
-            //Log.d(LOG_TAG, "Built base route $fullRoute")
-        } else {
-            fullRoute += "/$argVal"
-            //Log.d(LOG_TAG, "Built specific route $fullRoute")
-        }
-        return fullRoute
-    }
+    override val arguments = listOf(
+        navArgument(ARG_UUID_NAME) { type = NavType.StringType }
+    )
 
-    override val route = buildFullRoute(ARG_UUID_NAME)
+    override val route = "$ROUTE_BASE/{$ARG_UUID_NAME}"
+
     override val title = R.string.app_name
 
-    override fun buildRoute(vararg args: String?): String = buildFullRoute(args[0] ?: "0")
+    override fun buildRoute(vararg args: String?): String {
+        val uuid = args.getOrNull(0) ?: "0"
+        return "$ROUTE_BASE/$uuid"
+    }
 
     @Composable
     override fun Content(
@@ -60,8 +56,10 @@ data object TripExploreSpec : IScreenSpec {
         navBackStackEntry: NavBackStackEntry,
         context: Context
     ) {
+
         val uuidString = navBackStackEntry.arguments?.getString(ARG_UUID_NAME)
         val tripId = uuidString?.let { UUID.fromString(it) }
+
 
         if (tripId != null) {
             ExistingTripExploreScreen(
@@ -76,8 +74,14 @@ data object TripExploreSpec : IScreenSpec {
                 onAddButtonClick = {
                     navController.navigate(AddItemToTripSpec.route)
                 },
-                onHitSearch = {
-                    navController.navigate(TrailScreenSpec.route)
+                onHitSearch = { lat, lon ->
+                    navController.navigate(
+                        TrailScreenSpec.buildRoute(
+                            tripId.toString(),
+                            lat.toString(),
+                            lon.toString()
+                        )
+                    )
                 }
             )
         }

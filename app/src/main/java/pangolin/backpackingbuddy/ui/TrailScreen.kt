@@ -22,7 +22,7 @@ import pangolin.backpackingbuddy.data.dataEntries.Trail
 import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
 
 @Composable
-fun TrailScreen(viewModel: BackpackingBuddyViewModel) {
+fun TrailScreen(viewModel: BackpackingBuddyViewModel, lat: Double, lon: Double) {
     val trails = viewModel.trailData
     val error = viewModel.errorMessage
     val context = LocalContext.current
@@ -36,15 +36,15 @@ fun TrailScreen(viewModel: BackpackingBuddyViewModel) {
 
     var selectedTrailName by remember { mutableStateOf<String?>(null) }
 
-    LaunchedEffect(Unit) {
-        viewModel.loadTrails()
+    LaunchedEffect(lat, lon) {
+        viewModel.loadTrails(lat, lon)
     }
 
     val nodesMap = trails.filter { it.type == "node" && it.lat != null && it.lon != null }
         .associateBy { it.id }
 
     val ways = trails.filter {
-        it.type == "way" && it.nodes != null && it.tags?.containsKey("name") == true
+        it.type == "way" && it.nodes != null
     }
 
     Box(modifier = Modifier.fillMaxSize()) {

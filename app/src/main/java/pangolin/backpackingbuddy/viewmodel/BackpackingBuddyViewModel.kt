@@ -214,11 +214,13 @@ class BackpackingBuddyViewModel(private val backpackingBuddyRepo : BackpackingBu
     var errorMessage by mutableStateOf<String?>(null)
         private set
 
-    fun loadTrails() {
+    fun loadTrails(lat: Double, lon: Double) {
+        val boundLat: Double = lat + 2.0
+        val boundLon: Double = lon + 1.0
         val query = """
-        [out:json][timeout:120];
+        [out:json][timeout:180];
         (
-          way["highway"="path"]["sac_scale"="hiking"](38.6,-106.0,40.9,-104.6);
+          way["highway"="path"]["sac_scale"="hiking"]($lat,$lon,$boundLat,$boundLon);
           node(w);
         );
         out body;

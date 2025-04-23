@@ -1,6 +1,7 @@
 package pangolin.backpackingbuddy.ui.navigation.specs
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import pangolin.backpackingbuddy.R
 import pangolin.backpackingbuddy.ui.TrailScreen
 import pangolin.backpackingbuddy.ui.exploreScreen.ExploreScreen
@@ -26,11 +30,25 @@ import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
 
 object TrailScreenSpec : IScreenSpec {
     private const val LOG_TAG = "448.TrailScreenSpec"
+    private const val ARG_LAT = "lat"
+    private const val ARG_LON = "lon"
+    private const val ARG_UUID_NAME = "uuid"
 
-    override val route = "trailScreen"
+    override val route = "trail_screen/{$ARG_UUID_NAME}/{$ARG_LAT}/{$ARG_LON}"
     override val title = R.string.app_name
-    override val arguments: List<NamedNavArgument> = emptyList()
-    override fun buildRoute(vararg args: String?) = route
+
+    override val arguments = listOf(
+        navArgument(ARG_UUID_NAME) { type = NavType.StringType },
+        navArgument(ARG_LAT) { type = NavType.StringType },
+        navArgument(ARG_LON) { type = NavType.StringType }
+    )
+
+    override fun buildRoute(vararg args: String?): String {
+        val uuid = args.getOrNull(0) ?: "0"
+        val lat = args.getOrNull(1) ?: "0.0"
+        val lon = args.getOrNull(2) ?: "0.0"
+        return "trail_screen/$uuid/$lat/$lon"
+    }
 
     @Composable
     override fun Content(
@@ -40,7 +58,19 @@ object TrailScreenSpec : IScreenSpec {
         navBackStackEntry: NavBackStackEntry,
         context: Context
     ) {
-        TrailScreen(backpackingBuddyViewModel)
+        val lat = navBackStackEntry.arguments?.getString(ARG_LAT)?.toDoubleOrNull()
+        val lon = navBackStackEntry.arguments?.getString(ARG_LON)?.toDoubleOrNull()
+
+        if (lat == null || lon == null) {
+            Log.e("TrailScreenSpec", "Missing coordinates!")
+            return
+        }
+
+        TrailScreen(
+            viewModel = backpackingBuddyViewModel,
+            lat = lat,
+            lon = lon
+        )
     }
 
     @Composable
