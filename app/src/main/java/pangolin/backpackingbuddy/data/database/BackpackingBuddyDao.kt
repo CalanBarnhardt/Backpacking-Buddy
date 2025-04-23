@@ -26,8 +26,8 @@ interface BackpackingBuddyDao {
     suspend fun getTrailsByTripId(tripId: Long): List<Trail>
 
     // retrieve all trip names
-    @Query ("SELECT trip_name FROM Trips")
-    fun getTripNames(): Flow<List<String>>
+    @Query ("SELECT trip_name FROM Trips WHERE email = :email")
+    fun getTripNames(email: String): Flow<List<String>>
 
     // gets trip ID from name
     //TODO: doesn't work with duplicate names

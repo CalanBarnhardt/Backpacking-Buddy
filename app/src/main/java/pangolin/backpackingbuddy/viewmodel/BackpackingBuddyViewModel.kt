@@ -46,7 +46,7 @@ class BackpackingBuddyViewModel(private val backpackingBuddyRepo : BackpackingBu
 
     // retrieves trip names for profile screen
     fun retrieveNames () : Flow<List<String>> {
-        return backpackingBuddyRepo.getTripNames()
+        return backpackingBuddyRepo.getTripNames(getCurrentEmail())
 
     }
 
@@ -63,7 +63,7 @@ class BackpackingBuddyViewModel(private val backpackingBuddyRepo : BackpackingBu
 
     fun addTrip (tripName: String, start_date: Date, end_date: Date) {
         viewModelScope.launch {
-            backpackingBuddyRepo.addTrip(tripName, start_date, end_date)
+            backpackingBuddyRepo.addTrip(tripName, start_date, end_date, getCurrentEmail())
         }
     }
 

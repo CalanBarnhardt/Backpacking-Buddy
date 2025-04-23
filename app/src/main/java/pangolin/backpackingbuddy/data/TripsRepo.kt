@@ -42,15 +42,21 @@ class BackpackingBuddyRepo private constructor(private val backpackingBuddyDao: 
 
     // TODO: add the functions here!
 
-    fun getTripNames() : Flow<List<String>> = backpackingBuddyDao.getTripNames()
+    fun getTripNames(email: String) : Flow<List<String>> = backpackingBuddyDao.getTripNames(email)
 
     fun getIDFromName(trip_name: String): Flow<UUID> = backpackingBuddyDao.getIDFromName(trip_name)
 
     fun getNameFromID(trip_id: UUID): Flow<String> = backpackingBuddyDao.getNameFromID(trip_id)
 
-    suspend fun addTrip(trip_name: String, start_date: Date, end_date: Date) = backpackingBuddyDao.addTrip(
-        Trips(trip_name, start_date, end_date)
-    )
+    suspend fun addTrip(trip_name: String, start_date: Date, end_date: Date, email: String) =
+        backpackingBuddyDao.addTrip(
+            Trips(
+                trip_name = trip_name,
+                start_date = start_date,
+                end_date = end_date,
+                email = email
+            )
+        )
 
     fun getTripDates(tripId: UUID): Flow<TripDates> = backpackingBuddyDao.getTripDates(tripId)
 
