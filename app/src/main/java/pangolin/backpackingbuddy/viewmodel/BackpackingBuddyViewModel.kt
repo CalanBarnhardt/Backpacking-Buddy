@@ -219,6 +219,14 @@ class BackpackingBuddyViewModel(private val backpackingBuddyRepo : BackpackingBu
         _signinError.value = null
     }
 
+    fun getCurrentEmail(): String {
+        val email = auth.currentUser?.email
+        if(email != null){
+            return email
+        }
+        return "No user"
+    }
+
     var trailData by mutableStateOf<List<Element>>(emptyList())
         private set
 

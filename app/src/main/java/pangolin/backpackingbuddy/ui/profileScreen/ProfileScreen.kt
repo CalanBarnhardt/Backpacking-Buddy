@@ -3,6 +3,7 @@ package pangolin.backpackingbuddy.ui.profileScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -31,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -59,12 +61,24 @@ fun ProfileScreen(viewModel: BackpackingBuddyViewModel, onCreateTrip: () -> Unit
                 modifier = Modifier.size(48.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                "Calan",
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.weight(1f))
+            BoxWithConstraints(
+                modifier = Modifier.weight(1f) // Take available space, leaving room for the button
+            ) {
+                val fontSize = when {
+                    maxWidth < 150.dp -> 16.sp // Smaller font for tight space
+                    maxWidth < 200.dp -> 18.sp // Medium font for moderate space
+                    else -> 20.sp // Default font size
+                }
+                Text(
+                    text = viewModel.getCurrentEmail(),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis, // Show ellipsis if text is too long
+                    modifier = Modifier.align(Alignment.CenterStart)
+                )
+            }
+            Spacer(modifier = Modifier.weight(.1f))
 
             OutlinedButton(onClick = { onSignout() }) {
                 Text(stringResource(R.string.signout))
