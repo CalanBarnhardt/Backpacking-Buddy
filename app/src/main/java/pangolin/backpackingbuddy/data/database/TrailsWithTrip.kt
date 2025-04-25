@@ -16,3 +16,4 @@ data class TripWithTrails(
     )
     val trails: List<Trail>
 )
+

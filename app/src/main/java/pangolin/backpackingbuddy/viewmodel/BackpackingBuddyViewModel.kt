@@ -4,9 +4,11 @@ import BackpackingBuddyRepo
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -23,7 +25,10 @@ import pangolin.backpackingbuddy.data.dataEntries.Trail
 import pangolin.backpackingbuddy.data.dataEntries.Trips
 import pangolin.backpackingbuddy.data.database.TripDates
 import pangolin.backpackingbuddy.data.network.RetrofitClient
+import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 import java.util.UUID
 
 class BackpackingBuddyViewModel(private val backpackingBuddyRepo : BackpackingBuddyRepo): ViewModel() {
@@ -47,7 +52,24 @@ class BackpackingBuddyViewModel(private val backpackingBuddyRepo : BackpackingBu
     // retrieves trip names for profile screen
     fun retrieveNames () : Flow<List<String>> {
         return backpackingBuddyRepo.getTripNames(getCurrentEmail())
+    }
 
+    fun deleteTrip (tripId: UUID) {
+        viewModelScope.launch {
+            backpackingBuddyRepo.deleteTrip(tripId)
+        }
+    }
+
+    fun deleteTrail (trail: Trail){
+        viewModelScope.launch {
+            backpackingBuddyRepo.deleteTrail(trail)
+        }
+    }
+
+    fun deleteCampsite (campsite: Campsite){
+        viewModelScope.launch {
+            backpackingBuddyRepo.deleteCampsite(campsite)
+        }
     }
 
     // retrieves trip ID from a given trip name
@@ -60,10 +82,21 @@ class BackpackingBuddyViewModel(private val backpackingBuddyRepo : BackpackingBu
         return backpackingBuddyRepo.getNameFromID(trip_id)
     }
 
-
     fun addTrip (tripName: String, start_date: Date, end_date: Date) {
         viewModelScope.launch {
             backpackingBuddyRepo.addTrip(tripName, start_date, end_date, getCurrentEmail())
+        }
+    }
+
+    fun associateCampsiteWithDate (campsite: Campsite, date: String){
+        viewModelScope.launch {
+            backpackingBuddyRepo.associateCampsiteWithDate(campsite, date)
+        }
+    }
+
+    fun associateTrailWithDate (trail : Trail, date: String) {
+        viewModelScope.launch {
+            backpackingBuddyRepo.associateTrailWithDate(trail, date)
         }
     }
 
@@ -91,6 +124,25 @@ class BackpackingBuddyViewModel(private val backpackingBuddyRepo : BackpackingBu
     fun getCampsitesForTrip(tripId: UUID): Flow<List<Campsite>> {
         return backpackingBuddyRepo.getCampsitesForTrip(tripId)
     }
+
+//    fun convertToDateList(tripId: UUID): List<String> {
+//
+//        val tripDates = getTripDates(tripId)
+//
+//        val (start, end) = tripDates.value.range
+//        val dateFormatter =  SimpleDateFormat("MM/dd", Locale.getDefault())
+//
+//        val list = mutableListOf<String>()
+//        val calendar = Calendar.getInstance().apply { time = start }
+//        val endCalendar = Calendar.getInstance().apply { time = end }
+//
+//        while (!calendar.after(endCalendar)) {
+//            list.add(dateFormatter.format(calendar.time))
+//            calendar.add(Calendar.DATE, 1)
+//        }
+//
+//        return list
+//    }
 
     //====================================================================================================================
     // SIGNUP SCREEN OPERATIONS

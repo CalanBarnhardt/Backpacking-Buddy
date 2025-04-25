@@ -1,6 +1,8 @@
 package pangolin.backpackingbuddy.ui.tripItinerary
 
+import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,8 +25,10 @@ import pangolin.backpackingbuddy.ui.sharedComponents.NavButton
 import pangolin.backpackingbuddy.ui.sharedComponents.TripNameDisplay
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
@@ -40,18 +44,22 @@ import java.util.Calendar
 import java.util.Locale
 import java.util.UUID
 import com.google.accompanist.flowlayout.FlowRow
+import pangolin.backpackingbuddy.data.dataEntries.Campsite
+import pangolin.backpackingbuddy.data.dataEntries.Trail
+import pangolin.backpackingbuddy.ui.tripOverviewScreen.CampsiteOverviewItem
+import pangolin.backpackingbuddy.ui.tripOverviewScreen.TrailOverviewItem
 
 @Composable
 fun ExisitngTripItinerary (
     viewModel: BackpackingBuddyViewModel,
-    tripId : UUID,
+    tripId : UUID?,
     onOverviewClick: () -> Unit,
     onExploreClick: () -> Unit ) {
     val cameraPosition = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(LatLng(0.0, 0.0), 0f)
     }
 
-    val tripName = viewModel.getNameFromID(tripId).collectAsState(initial = "")
+    val tripName = tripId?.let { viewModel.getNameFromID(it).collectAsState(initial = "") }
 
     Column (modifier = Modifier
         .fillMaxWidth(),
@@ -59,7 +67,9 @@ fun ExisitngTripItinerary (
 
         Spacer(modifier = Modifier.size(55.dp))
         // trip name display
-        TripNameDisplay(tripName.value)
+        tripName?.value?.let { name ->
+            TripNameDisplay(name)
+        }
 
         Spacer(modifier = Modifier.size(16.dp))
 
@@ -98,13 +108,22 @@ fun ExisitngTripItinerary (
             .clip(RoundedCornerShape(12.dp))
             .background(MaterialTheme.colorScheme.surface))
         {
-            val accessingDate = remember { mutableStateOf("6/28") }
-            val tripDates = viewModel.getTripDates(tripId).collectAsState(initial = null)
+            // getting trip date list
+            //=============================================
+            val tripDates = tripId?.let { viewModel.getTripDates(it).collectAsState(initial = null) }
+            if (tripDates != null) {
+                if (tripDates.value == null){
+                    Log.d("tag", "trip dates is null")
+                } else {
+                    Log.d("tag", "trip dates is not null")
+                }
+            }
 
             val dateFormatter = remember { SimpleDateFormat("MM/dd", Locale.getDefault()) }
 
-            val dates = remember(tripDates.value) {
-                tripDates.value?.let { (start, end) ->
+            val dates = remember(tripDates?.value) {
+                tripDates?.value?.let { (start, end) ->
+                    Log.d("log", start.toString() )
                     val list = mutableListOf<String>()
                     val calendar = Calendar.getInstance().apply { time = start }
                     val endCalendar = Calendar.getInstance().apply { time = end }
@@ -116,6 +135,23 @@ fun ExisitngTripItinerary (
 
                     list
                 } ?: emptyList()
+            }
+            var selectedDate by remember { mutableStateOf(dates.firstOrNull()) }
+
+
+            //==================================================================================
+
+            // collect campsites and trails
+            val trails = tripId?.let { viewModel.getTrailsForTrip(it).collectAsState(initial = emptyList()) }
+            val campsites = tripId?.let { viewModel.getCampsitesForTrip(it).collectAsState(initial = emptyList()) }
+
+            // create a map to associate trips and trails
+            val campsiteMap: Map<String, List<Campsite>> = dates.associateWith { date ->
+                campsites?.value?.filter { it.date == date } ?: emptyList()
+            }
+
+            val trailsMap: Map<String, List<Trail>> = dates.associateWith { date ->
+                trails?.value?.filter { it.date == date } ?: emptyList()
             }
 
             LazyColumn(
@@ -137,6 +173,9 @@ fun ExisitngTripItinerary (
                         ) {
                             dates.forEach { date ->
                                 Text(
+                                    modifier = Modifier.clickable {
+                                        selectedDate = date
+                                    },
                                     text = date,
                                     style = MaterialTheme.typography.bodyMedium
                                 )
@@ -144,7 +183,19 @@ fun ExisitngTripItinerary (
                         }
 
                         Spacer(modifier = Modifier.size(24.dp))
-                        Text(text = "Information about trail/campsites/itinerary here")
+                        val trailsForSelectedDate = trailsMap[selectedDate] ?: emptyList()
+                        trailsForSelectedDate.forEach { trail ->
+                            TrailOverviewItem(
+                                trail,
+                                { })
+                        }
+                        val campsitesForSelectedDate = campsiteMap[selectedDate] ?: emptyList()
+                        campsitesForSelectedDate.forEach { campsite ->
+                            CampsiteOverviewItem(
+                                campsite,
+                                { })
+                        }
+
                     }
                 }
             }

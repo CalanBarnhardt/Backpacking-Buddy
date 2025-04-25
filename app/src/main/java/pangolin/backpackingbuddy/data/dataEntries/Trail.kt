@@ -11,5 +11,7 @@ data class Trail (val name : String,
                   val distance: Int,
                   val difficulty: String? = null,
                   val description: String? = null,
+                  val date: String? = null,
                   @PrimaryKey
-                    val trail_id: UUID = UUID.randomUUID())
+                    val trail_id: UUID = UUID.randomUUID()) {
+}

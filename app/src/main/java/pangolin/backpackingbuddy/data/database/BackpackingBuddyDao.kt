@@ -1,6 +1,7 @@
 package pangolin.backpackingbuddy.data.database
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -40,6 +41,16 @@ interface BackpackingBuddyDao {
 
     @Query("SELECT start_date, end_date FROM Trips WHERE trip_id = :tripId")
     fun getTripDates(tripId: UUID): Flow<TripDates>
+
+    // delete trip with id
+    @Query("DELETE FROM Trips WHERE trip_id = :tripId")
+    suspend fun deleteTrip(tripId: UUID)
+
+    @Delete
+    suspend fun deleteTrail(trail: Trail)
+
+    @Delete
+    suspend fun deleteCampsite(campsite: Campsite)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertTrail(trail: Trail)
@@ -100,6 +111,14 @@ interface BackpackingBuddyDao {
     // TODO: delete a trip
 
     // TODO : delete reference to a trip (while trip is deleted)
+
+    @Query("UPDATE campsites SET date = :date WHERE campsite_id = :campsiteId")
+    suspend fun updateCampsiteDate(campsiteId: UUID, date: String)
+
+    @Query("UPDATE trails SET date = :date WHERE trail_id = :trailId")
+    suspend fun updateTrailDate(trailId: UUID, date: String)
+
+
 
 
 }

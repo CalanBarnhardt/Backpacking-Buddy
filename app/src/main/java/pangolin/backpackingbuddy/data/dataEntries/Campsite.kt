@@ -9,6 +9,7 @@ import java.util.UUID
         val name: String,
         val lat: Double,
         val lon: Double,
+        val date: String? = null,
         @PrimaryKey
         val campsite_id: UUID = UUID.randomUUID()
     )

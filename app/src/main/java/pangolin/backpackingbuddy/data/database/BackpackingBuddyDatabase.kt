@@ -13,7 +13,7 @@ import pangolin.backpackingbuddy.data.dataEntries.Trips
 
 @Database(
     entities = [Trips::class, Trail::class, TripTrailRef::class, Campsite::class, TripCampsiteRef::class],
-    version = 4,
+    version = 7,
     exportSchema = false
 )
 @TypeConverters(DataConverter::class)

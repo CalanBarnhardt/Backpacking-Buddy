@@ -53,14 +53,14 @@ import java.util.UUID
 @Composable
 fun ExistingTripExploreScreen(
     viewModel: BackpackingBuddyViewModel,
-    tripId: UUID,
+    tripId: UUID?,
     onOverviewClick: () -> Unit,
     onItineraryClick: () -> Unit,
     onAddButtonClick: () -> Unit,
     onHitTrailSearch: (Double, Double) -> Unit,
     onHitCampsiteSearch: (Double, Double) -> Unit){
 
-    val tripName = viewModel.getNameFromID(tripId).collectAsState(initial = "")
+    val tripName = tripId?.let { viewModel.getNameFromID(it).collectAsState(initial = "") }
 
     val selectedLatLngState = remember { mutableStateOf<LatLng?>(null) }
     val mapReadyState = remember { mutableStateOf(false) } // for completeness
@@ -74,7 +74,9 @@ fun ExistingTripExploreScreen(
         Spacer(modifier = Modifier.size(55.dp))
 
         // trip name display
-        TripNameDisplay(tripName.value)
+        tripName?.value?.let { name ->
+            TripNameDisplay(name)
+        }
 
         Spacer(modifier = Modifier.size(16.dp))
 

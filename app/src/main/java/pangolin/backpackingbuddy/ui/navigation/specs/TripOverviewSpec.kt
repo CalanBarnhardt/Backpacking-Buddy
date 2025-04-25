@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,6 +26,7 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import pangolin.backpackingbuddy.R
+import pangolin.backpackingbuddy.ui.theme.DarkForestGreen
 import pangolin.backpackingbuddy.ui.tripOverviewScreen.ExistingTripOverviewScreen
 import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
 import java.util.UUID
@@ -97,6 +99,8 @@ data object TripOverviewSpec : IScreenSpec {
 //        }
     }
 
+
+
     @Composable
     override fun BottomAppBarActions(
         backpackingBuddyViewModel: BackpackingBuddyViewModel,
@@ -105,6 +109,9 @@ data object TripOverviewSpec : IScreenSpec {
         context: Context
     )
     {
+        val uuidString = backStackEntry?.arguments?.getString(ARG_UUID_NAME)
+        val tripId = uuidString?.let { UUID.fromString(it) }
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -127,6 +134,21 @@ data object TripOverviewSpec : IScreenSpec {
                 Image(
                     painter = painterResource(id = R.drawable.compass_icon),
                     contentDescription = "Compass Icon"
+                )
+            }
+
+            Spacer(Modifier.padding(40.dp))
+
+
+            IconButton(onClick = {
+                navController.navigate(ProfileScreenSpec.route)
+                if (tripId != null) {
+                    backpackingBuddyViewModel.deleteTrip(tripId)
+                }
+            }) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Delete",
                 )
             }
         }

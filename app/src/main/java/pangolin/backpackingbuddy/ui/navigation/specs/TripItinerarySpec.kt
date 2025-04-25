@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -98,6 +99,9 @@ data object TripItinerarySpec : IScreenSpec {
         backStackEntry: NavBackStackEntry?,
         context: Context
     ) {
+        val uuidString = backStackEntry?.arguments?.getString(TripItinerarySpec.ARG_UUID_NAME)
+        val tripId = uuidString?.let { UUID.fromString(it) }
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -120,6 +124,21 @@ data object TripItinerarySpec : IScreenSpec {
                 Image(
                     painter = painterResource(id = R.drawable.compass_icon),
                     contentDescription = "Compass Icon"
+                )
+            }
+
+            Spacer(Modifier.padding(40.dp))
+
+
+            IconButton(onClick = {
+                navController.navigate(ProfileScreenSpec.route)
+                if (tripId != null) {
+                    backpackingBuddyViewModel.deleteTrip(tripId)
+                }
+            }) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Delete",
                 )
             }
         }

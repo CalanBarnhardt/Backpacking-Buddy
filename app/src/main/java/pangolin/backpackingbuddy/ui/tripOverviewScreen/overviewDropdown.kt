@@ -10,9 +10,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import pangolin.backpackingbuddy.data.dataEntries.Campsite
 import pangolin.backpackingbuddy.data.dataEntries.Trail
+import pangolin.backpackingbuddy.ui.navigation.specs.ProfileScreenSpec
 import pangolin.backpackingbuddy.ui.sharedComponents.BulletPoint
 import pangolin.backpackingbuddy.ui.sharedComponents.ExpandableIcon
 
@@ -51,30 +54,38 @@ fun OverviewDropdown(
 }
 
 @Composable
-fun CampsiteOverviewItem(campsite: Campsite) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 6.dp)
-            .clip(RoundedCornerShape(10.dp))
-            .background(MaterialTheme.colorScheme.secondaryContainer)
-            .padding(12.dp)
+fun CampsiteOverviewItem(
+    campsite: Campsite,
+    onCampsiteClick: (Campsite) -> Unit
     ) {
-        Text(
-            text = campsite.name,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSecondaryContainer
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = "Lat: %.2f, Lon: %.2f".format(campsite.lat, campsite.lon),
-            style = MaterialTheme.typography.bodySmall
-        )
-    }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 6.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(MaterialTheme.colorScheme.secondaryContainer)
+                .padding(12.dp)
+                .clickable {
+                    onCampsiteClick(campsite)
+                }
+        ) {
+            Text(
+                text = campsite.name,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSecondaryContainer
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "Lat: %.2f, Lon: %.2f".format(campsite.lat, campsite.lon),
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
 }
 
 @Composable
-fun TrailOverviewItem(trail: Trail) {
+fun TrailOverviewItem(
+    trail: Trail,
+    onTrailClick: (Trail) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -82,6 +93,9 @@ fun TrailOverviewItem(trail: Trail) {
             .clip(RoundedCornerShape(10.dp))
             .background(MaterialTheme.colorScheme.secondaryContainer)
             .padding(12.dp)
+            .clickable {
+                onTrailClick(trail)
+            }
     ) {
         Text(
             text = trail.name,

@@ -40,7 +40,12 @@ class BackpackingBuddyRepo private constructor(private val backpackingBuddyDao: 
 
     }
 
-    // TODO: add the functions here!
+
+    suspend fun deleteTrip (tripId: UUID) = backpackingBuddyDao.deleteTrip(tripId)
+
+    suspend fun deleteTrail(trail: Trail) = backpackingBuddyDao.deleteTrail(trail)
+
+    suspend fun deleteCampsite(campsite: Campsite) = backpackingBuddyDao.deleteCampsite(campsite)
 
     fun getTripNames(email: String) : Flow<List<String>> = backpackingBuddyDao.getTripNames(email)
 
@@ -66,6 +71,12 @@ class BackpackingBuddyRepo private constructor(private val backpackingBuddyDao: 
         backpackingBuddyDao.insertTrail(trail)
         backpackingBuddyDao.insertTripTrailCrossRef(TripTrailRef(tripId, trail.trail_id))
     }
+
+    suspend fun associateCampsiteWithDate(campsite: Campsite, date: String) =
+        backpackingBuddyDao.updateCampsiteDate(campsite.campsite_id, date)
+
+    suspend fun associateTrailWithDate(trail: Trail, date: String) =
+        backpackingBuddyDao.updateTrailDate(trail.trail_id, date)
 
     fun getTrailsForTrip(tripId: UUID): Flow<List<Trail>> =
         backpackingBuddyDao.getTrailsForTrip(tripId)
