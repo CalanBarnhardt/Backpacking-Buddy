@@ -56,7 +56,7 @@ fun ExisitngTripItinerary (
     onOverviewClick: () -> Unit,
     onExploreClick: () -> Unit ) {
     val cameraPosition = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(LatLng(0.0, 0.0), 0f)
+        position = CameraPosition.fromLatLngZoom(LatLng(38.1, -104.1), 12f)
     }
 
     val tripName = tripId?.let { viewModel.getNameFromID(it).collectAsState(initial = "") }
