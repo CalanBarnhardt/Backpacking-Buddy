@@ -96,7 +96,7 @@ object CampsiteScreenSpec : IScreenSpec {
             Spacer(Modifier.padding(40.dp))
 
             IconButton(onClick = {
-//                navController.navigate(ExploreScreenSpec.route)
+                navController.navigate(ExploreScreenSpec.route)
             }) {
                 Image(
                     painter = painterResource(id = R.drawable.compass_icon),
