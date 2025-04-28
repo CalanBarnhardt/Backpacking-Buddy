@@ -1,6 +1,7 @@
 package pangolin.backpackingbuddy.ui.navigation.specs
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -35,6 +36,7 @@ import java.util.UUID
 data object TripExploreSpec : IScreenSpec {
     private const val ARG_UUID_NAME = "uuid"
     private const val ROUTE_BASE = "trip_explore"
+    private const val LOG_TAG = "448.TripExploreSpec"
 
     override val arguments = listOf(
         navArgument(ARG_UUID_NAME) { type = NavType.StringType }
@@ -76,6 +78,7 @@ data object TripExploreSpec : IScreenSpec {
                     navController.navigate(AddItemToTripSpec.route)
                 },
                 onHitTrailSearch = { lat, lon ->
+                    Log.d(LOG_TAG, "navigating to the trail screen spec with trip id: ${tripId.toString()}")
                     navController.navigate(
                         TrailScreenSpec.buildRoute(
                             tripId.toString(),
@@ -85,6 +88,7 @@ data object TripExploreSpec : IScreenSpec {
                     )
                 },
                 onHitCampsiteSearch = {lat, lon ->
+                    Log.d(LOG_TAG, "navigating to the campsite screen spec")
                     navController.navigate(
                         CampsiteScreenSpec.buildRoute(
                             tripId.toString(),
