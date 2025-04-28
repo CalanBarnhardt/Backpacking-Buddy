@@ -24,6 +24,7 @@ retrofitVersion = "2.11.0"
 gsonVersion = "2.10.1"
 kspVersion = "2.0.21-1.0.27"
 roomVersion = "2.7.1"
+datastore = "1.1.2"
 
 
 [libraries]
@@ -57,6 +58,7 @@ androidx-room-common = { group = "androidx.room", name = "room-common", version.
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomVersion" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomVersion" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomVersion" }
+androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

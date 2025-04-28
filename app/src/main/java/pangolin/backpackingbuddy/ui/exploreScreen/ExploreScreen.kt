@@ -1,6 +1,7 @@
 package pangolin.backpackingbuddy.ui.exploreScreen
 
 import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,9 +11,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Snackbar
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -21,6 +25,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,19 +33,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.MapType
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
+import kotlinx.coroutines.launch
 import pangolin.backpackingbuddy.R
 import pangolin.backpackingbuddy.data.dataEntries.Campsite
 import pangolin.backpackingbuddy.data.dataEntries.Trail
+import pangolin.backpackingbuddy.data.datastore.DataStoreManager
 import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
+import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModelFactory
 
 private const val LOG_TAG = "448.ExploreScreen"
 
@@ -56,16 +68,49 @@ fun ExploreScreen(
     val showTrails = remember { mutableStateOf(false) }
     val showCampsites = remember { mutableStateOf(false) }
 
+    val context = LocalContext.current
+    val dataStoreManager = remember { DataStoreManager(context) }
+    val lifeCycleOwner = LocalLifecycleOwner.current
+    val maptypeState = dataStoreManager
+        .maptypeFlow
+        .collectAsStateWithLifecycle(
+            initialValue = "NORMAL",
+            lifecycle = lifeCycleOwner.lifecycle
+        )
+    val locationState = dataStoreManager
+        .locationFlow
+        .collectAsStateWithLifecycle(
+            initialValue = false,
+            lifecycle = lifeCycleOwner.lifecycle
+        )
+
+    var mapType: MapType = MapType.NORMAL
+    if (maptypeState.value == "TERRAIN") {
+        mapType = MapType.TERRAIN
+    }
+    else if (maptypeState.value == "SATELLITE") {
+        mapType = MapType.SATELLITE
+    }
+
+    val mapProperties = MapProperties(
+        mapType = mapType
+    )
+
     // values for showing a trip
     var selectedTrailName by remember { mutableStateOf<String?>(null) }
 
     // values for showing a campsite
     var selectedCampsite by remember { mutableStateOf<Campsite?>(null) }
 
+    val scope = rememberCoroutineScope()
+
+    val radioOptions = listOf("NORMAL", "TERRAIN", "SATELLITE")
+    var selectedOption = remember { mutableStateOf("NORMAL") }
+
     Column(
         modifier = Modifier.fillMaxHeight()
     ) {
-        Spacer(modifier = Modifier.height(28.dp))
+        Spacer(modifier = Modifier.height(18.dp))
 
         Text(
             text = "Welcome to Explore",
@@ -74,14 +119,11 @@ fun ExploreScreen(
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
 
-        Spacer(modifier = Modifier.height(28.dp))
+        Spacer(modifier = Modifier.height(18.dp))
 
         Button(
             onClick = {
                 showTrails.value = true
-//                selectedLatLngState.value?.let { latLng ->
-//                    showTrails.value = true
-//                }
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -93,9 +135,6 @@ fun ExploreScreen(
         Button(
             onClick = {
                 showCampsites.value = true
-//                selectedLatLngState.value?.let { latLng ->
-//                    showCampsites.value = true
-//                }
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -104,7 +143,57 @@ fun ExploreScreen(
             Text("Search Campsites")
         }
         
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Enable Location?",
+                    modifier = Modifier
+                )
+
+                Spacer(Modifier.padding(10.dp))
+
+                Switch(
+                    checked = locationState.value,
+                    onCheckedChange = {
+                        scope.launch {
+                            dataStoreManager.setLocation(!locationState.value)
+                        }
+                    }
+                )
+            }
+            Row(
+                modifier = Modifier.selectableGroup(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                radioOptions.forEach { text ->
+                    Column(
+                        modifier = Modifier.padding(4.dp)
+                    ) {
+                        RadioButton(
+                            selected = (text == selectedOption.value),
+                            onClick = {
+                                Log.d(LOG_TAG, "changing to be $text")
+                                selectedOption.value = text
+                                scope.launch {
+                                    dataStoreManager.setMaptype(text)
+                                }
+                            }
+                        )
+                        Text(
+                            text = text
+                        )
+                    }
+                }
+            }
+        }
 
         Box(
             modifier = Modifier.fillMaxSize()
@@ -118,7 +207,7 @@ fun ExploreScreen(
                     selectedLatLngState.value = latLng
                 },
                 uiSettings = MapUiSettings(),
-                properties = MapProperties()
+                properties = mapProperties
             ) {
                 selectedLatLngState.value?.let { selected ->
                     Marker(
@@ -131,7 +220,6 @@ fun ExploreScreen(
                 if (showTrails.value) {
                     val trails = viewModel.trailData
                     val error = viewModel.errorMessage
-                    val context = LocalContext.current
 
                     var showTripDialog by remember { mutableStateOf(false) }
                     var trailToAdd by remember { mutableStateOf<Trail?>(null) }
@@ -180,7 +268,6 @@ fun ExploreScreen(
                 if (showCampsites.value) {
                     val campsites = viewModel.campsiteData
                     val error = viewModel.errorMessage
-                    val context = LocalContext.current
 
                     var showTripDialog by remember { mutableStateOf(false) }
                     val trips by viewModel.getAllTrips().collectAsState(initial = emptyList())
@@ -254,5 +341,8 @@ fun ExploreScreen(
 @Preview(showBackground = true)
 @Composable
 private fun PreviewExploreScreen() {
+//    val context = LocalContext.current
+//    val factory = BackpackingBuddyViewModelFactory(context, lifecycleScope)
+//    val backpackingBuddyViewModel = ViewModelProvider(context, factory)[factory.getViewModelClass()]
 //    ExploreScreen({}, {})
 }
