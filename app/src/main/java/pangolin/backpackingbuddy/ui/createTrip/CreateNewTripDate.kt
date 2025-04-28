@@ -40,6 +40,8 @@ import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun CreateNewTripDate(viewModel: BackpackingBuddyViewModel,
@@ -47,8 +49,12 @@ fun CreateNewTripDate(viewModel: BackpackingBuddyViewModel,
                       onGetStarted: () -> Unit) {
     var showRangePicker by remember { mutableStateOf(false) }
 
-    var startDate by remember { mutableStateOf("") }
-    var endDate by remember { mutableStateOf("") }
+    var startDate by remember { mutableStateOf(
+        LocalDate.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
+    ) }
+    var endDate by remember { mutableStateOf(
+        LocalDate.now().plusDays(7).format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
+    ) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
