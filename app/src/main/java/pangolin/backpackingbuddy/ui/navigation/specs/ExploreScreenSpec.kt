@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -41,9 +40,7 @@ object ExploreScreenSpec : IScreenSpec {
         context: Context
     ) {
         ExploreScreen(
-            onHitSearch = {
-                navController.navigate(TrailScreenSpec.route)
-            }
+            viewModel = backpackingBuddyViewModel
         )
     }
 
