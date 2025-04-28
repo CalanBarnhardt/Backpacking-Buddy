@@ -76,7 +76,7 @@ fun CampsiteOverviewItem(
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Lat: %.2f, Lon: %.2f".format(campsite.lat, campsite.lon),
+                text = "Location: Lat: %.2f, Lon: %.2f".format(campsite.lat, campsite.lon),
                 style = MaterialTheme.typography.bodySmall
             )
         }
