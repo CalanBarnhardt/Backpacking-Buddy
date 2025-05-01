@@ -24,23 +24,23 @@ interface BackpackingBuddyDao {
     INNER JOIN TripTrailRef ON trails.trail_Id = TripTrailRef.trailId
     WHERE TripTrailRef.tripId = :tripId
 """)
-    suspend fun getTrailsByTripId(tripId: Long): List<Trail>
+    suspend fun getTrailsByTripId(tripId: Long): List<Trail?>
 
     // retrieve all trip names
     @Query ("SELECT trip_name FROM Trips WHERE email = :email")
-    fun getTripNames(email: String): Flow<List<String>>
+    fun getTripNames(email: String): Flow<List<String?>>
 
     // gets trip ID from name
     //TODO: doesn't work with duplicate names
     @Query ("SELECT trip_id FROM Trips WHERE trip_name = :tripName")
-    fun getIDFromName(tripName: String): Flow<UUID>
+    fun getIDFromName(tripName: String): Flow<UUID?>
 
     // get name from trip ID
     @Query ("SELECT trip_name FROM Trips WHERE trip_id = :id")
-    fun getNameFromID(id: UUID): Flow<String>
+    fun getNameFromID(id: UUID): Flow<String?>
 
     @Query("SELECT start_date, end_date FROM Trips WHERE trip_id = :tripId")
-    fun getTripDates(tripId: UUID): Flow<TripDates>
+    fun getTripDates(tripId: UUID): Flow<TripDates?>
 
     // delete trip with id
     @Query("DELETE FROM Trips WHERE trip_id = :tripId")
@@ -62,7 +62,7 @@ interface BackpackingBuddyDao {
     suspend fun insertTripCampsiteRef(ref: TripCampsiteRef)
 
     @Query("SELECT * FROM trips")
-    fun getAllTrips(): Flow<List<Trips>>
+    fun getAllTrips(): Flow<List<Trips?>>
 
     @Transaction
     @Query("""
@@ -70,7 +70,7 @@ interface BackpackingBuddyDao {
     INNER JOIN TripTrailRef ON trails.trail_id = TripTrailRef.trailId
     WHERE TripTrailRef.tripId = :tripId
     """)
-    fun getTrailsForTrip(tripId: UUID): Flow<List<Trail>>
+    fun getTrailsForTrip(tripId: UUID): Flow<List<Trail?>>
 
     @Transaction
     @Query("""
@@ -78,7 +78,7 @@ interface BackpackingBuddyDao {
     INNER JOIN TripCampsiteRef ON campsites.campsite_id = TripCampsiteRef.campsiteId
     WHERE TripCampsiteRef.tripId = :tripId
     """)
-    fun getCampsitesForTrip(tripId: UUID): Flow<List<Campsite>>
+    fun getCampsitesForTrip(tripId: UUID): Flow<List<Campsite?>>
 
 
     // add a trail to the trails and return id

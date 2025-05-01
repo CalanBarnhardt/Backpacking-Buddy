@@ -123,12 +123,18 @@ fun ProfileScreen(viewModel: BackpackingBuddyViewModel, onCreateTrip: () -> Unit
 
             items(tripList) { trip ->
                 Button(
-                    onClick = { onExistingTrip(trip) },
+                    onClick = {
+                        if (trip != null) {
+                            onExistingTrip(trip)
+                        }
+                    },
                     modifier = Modifier.fillMaxWidth(0.8f),
                     shape = MaterialTheme.shapes.medium,
                     contentPadding = PaddingValues(24.dp)
                 ) {
-                    Text(trip)
+                    if (trip != null) {
+                        Text(trip)
+                    }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
             }

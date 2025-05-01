@@ -72,7 +72,7 @@ fun ExistingTripExploreScreen(
     val selectedLatLngState = remember { mutableStateOf<LatLng?>(null) }
     val mapReadyState = remember { mutableStateOf(false) }
     val cameraPosition = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(LatLng(38.2, -105.1), 12f)
+        position = CameraPosition.fromLatLngZoom(LatLng(0.0, 0.0), 0f)
     }
 
     val permissionLauncher = rememberLauncherForActivityResult(
@@ -99,7 +99,9 @@ fun ExistingTripExploreScreen(
         tripId?.let { id ->
             val tripName = viewModel.getNameFromID(id).collectAsState(initial = "")
             tripName.value.let { name ->
-                TripNameDisplay(name)
+                if (name != null) {
+                    TripNameDisplay(name)
+                }
             }
         }
 

@@ -108,16 +108,22 @@ fun TrailScreen(viewModel: BackpackingBuddyViewModel, lat: Double, lon: Double) 
                 Column {
                     trips.forEach { trip ->
                         TextButton(onClick = {
-                            viewModel.addTrailToTrip(trailToAdd!!, trip.trip_id)
-                            Toast.makeText(
-                                context,
-                                "${trailToAdd!!.name} added to ${trip.trip_name}",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            if (trip != null) {
+                                viewModel.addTrailToTrip(trailToAdd!!, trip.trip_id)
+                            }
+                            if (trip != null) {
+                                Toast.makeText(
+                                    context,
+                                    "${trailToAdd!!.name} added to ${trip.trip_name}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                             showTripDialog = false
                             selectedTrailName = null
                         }) {
-                            Text(trip.trip_name)
+                            if (trip != null) {
+                                Text(trip.trip_name)
+                            }
                         }
                     }
                 }

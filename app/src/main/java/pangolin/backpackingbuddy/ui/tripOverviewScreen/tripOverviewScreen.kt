@@ -141,9 +141,11 @@ fun ExistingTripOverviewScreen(
                     if (trailsExpanded.value) {
                         if (trails != null && trails.value.isNotEmpty()) {
                             trails.value.forEach { trail ->
-                                TrailOverviewItem(trail,
-                                    { showTrailPrompt = true
-                                        selectedTrail = trail })
+                                if (trail != null) {
+                                    TrailOverviewItem(trail,
+                                        { showTrailPrompt = true
+                                            selectedTrail = trail })
+                                }
                             }
                         } else {
                             Text("No trails added yet.", style = MaterialTheme.typography.bodyMedium)
@@ -162,10 +164,12 @@ fun ExistingTripOverviewScreen(
                     if (campsiteExpanded.value) {
                         if (campsites != null && campsites.value.isNotEmpty()) {
                             campsites.value.forEach { campsite ->
-                                CampsiteOverviewItem(
-                                    campsite,
-                                    { showCampsitePrompt = true
-                                    selectedCampsite = campsite })
+                                if (campsite != null) {
+                                    CampsiteOverviewItem(
+                                        campsite,
+                                        { showCampsitePrompt = true
+                                            selectedCampsite = campsite })
+                                }
                             }
                         } else {
                             Text("No campsites added yet.", style = MaterialTheme.typography.bodyMedium)

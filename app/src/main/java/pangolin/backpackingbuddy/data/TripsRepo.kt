@@ -47,11 +47,11 @@ class BackpackingBuddyRepo private constructor(private val backpackingBuddyDao: 
 
     suspend fun deleteCampsite(campsite: Campsite) = backpackingBuddyDao.deleteCampsite(campsite)
 
-    fun getTripNames(email: String) : Flow<List<String>> = backpackingBuddyDao.getTripNames(email)
+    fun getTripNames(email: String) : Flow<List<String?>> = backpackingBuddyDao.getTripNames(email)
 
-    fun getIDFromName(trip_name: String): Flow<UUID> = backpackingBuddyDao.getIDFromName(trip_name)
+    fun getIDFromName(trip_name: String): Flow<UUID?> = backpackingBuddyDao.getIDFromName(trip_name)
 
-    fun getNameFromID(trip_id: UUID): Flow<String> = backpackingBuddyDao.getNameFromID(trip_id)
+    fun getNameFromID(trip_id: UUID): Flow<String?> = backpackingBuddyDao.getNameFromID(trip_id)
 
     suspend fun addTrip(trip_name: String, start_date: Date, end_date: Date, email: String) =
         backpackingBuddyDao.addTrip(
@@ -63,9 +63,9 @@ class BackpackingBuddyRepo private constructor(private val backpackingBuddyDao: 
             )
         )
 
-    fun getTripDates(tripId: UUID): Flow<TripDates> = backpackingBuddyDao.getTripDates(tripId)
+    fun getTripDates(tripId: UUID): Flow<TripDates?> = backpackingBuddyDao.getTripDates(tripId)
 
-    fun getAllTrips(): Flow<List<Trips>> = backpackingBuddyDao.getAllTrips()
+    fun getAllTrips(): Flow<List<Trips?>> = backpackingBuddyDao.getAllTrips()
 
     suspend fun addTrail(trail: Trail, tripId: UUID) {
         backpackingBuddyDao.insertTrail(trail)
@@ -78,7 +78,7 @@ class BackpackingBuddyRepo private constructor(private val backpackingBuddyDao: 
     suspend fun associateTrailWithDate(trail: Trail, date: String) =
         backpackingBuddyDao.updateTrailDate(trail.trail_id, date)
 
-    fun getTrailsForTrip(tripId: UUID): Flow<List<Trail>> =
+    fun getTrailsForTrip(tripId: UUID): Flow<List<Trail?>> =
         backpackingBuddyDao.getTrailsForTrip(tripId)
 
     suspend fun addCampsite(campsite: Campsite, tripId: UUID) {
@@ -88,7 +88,7 @@ class BackpackingBuddyRepo private constructor(private val backpackingBuddyDao: 
         )
     }
 
-    fun getCampsitesForTrip(tripId: UUID): Flow<List<Campsite>> =
+    fun getCampsitesForTrip(tripId: UUID): Flow<List<Campsite?>> =
         backpackingBuddyDao.getCampsitesForTrip(tripId)
 
 }

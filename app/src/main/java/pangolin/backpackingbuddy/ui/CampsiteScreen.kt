@@ -94,16 +94,22 @@ fun CampsiteScreen(viewModel: BackpackingBuddyViewModel, lat: Double, lon: Doubl
                     Column {
                         trips.forEach { trip ->
                             TextButton(onClick = {
-                                viewModel.addCampsiteToTrip(selectedCampsite!!, trip.trip_id)
-                                Toast.makeText(
-                                    context,
-                                    "${selectedCampsite!!.name} added to ${trip.trip_name}",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                if (trip != null) {
+                                    viewModel.addCampsiteToTrip(selectedCampsite!!, trip.trip_id)
+                                }
+                                if (trip != null) {
+                                    Toast.makeText(
+                                        context,
+                                        "${selectedCampsite!!.name} added to ${trip.trip_name}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                                 showTripDialog = false
                                 selectedCampsite = null
                             }) {
-                                Text(trip.trip_name)
+                                if (trip != null) {
+                                    Text(trip.trip_name)
+                                }
                             }
                         }
                     }

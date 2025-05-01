@@ -25,11 +25,14 @@ import pangolin.backpackingbuddy.data.dataEntries.Trail
 import pangolin.backpackingbuddy.data.dataEntries.Trips
 import pangolin.backpackingbuddy.data.database.TripDates
 import pangolin.backpackingbuddy.data.network.RetrofitClient
+import java.lang.Math.toRadians
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.UUID
+import kotlin.math.cos
+
 
 class BackpackingBuddyViewModel(private val backpackingBuddyRepo : BackpackingBuddyRepo): ViewModel() {
     private val auth: FirebaseAuth = Firebase.auth
@@ -50,7 +53,7 @@ class BackpackingBuddyViewModel(private val backpackingBuddyRepo : BackpackingBu
     // TODO: retrieve all the trips listed under the user to be observed by the profile screen so a button can display per
 
     // retrieves trip names for profile screen
-    fun retrieveNames () : Flow<List<String>> {
+    fun retrieveNames () : Flow<List<String?>> {
         return backpackingBuddyRepo.getTripNames(getCurrentEmail())
     }
 
@@ -73,12 +76,12 @@ class BackpackingBuddyViewModel(private val backpackingBuddyRepo : BackpackingBu
     }
 
     // retrieves trip ID from a given trip name
-    fun getIDFromName (trip_name: String) : Flow<UUID> {
+    fun getIDFromName (trip_name: String) : Flow<UUID?> {
         return backpackingBuddyRepo.getIDFromName(trip_name)
     }
 
     // retrieve trip name from given trip ID
-    fun getNameFromID (trip_id: UUID) : Flow<String> {
+    fun getNameFromID (trip_id: UUID) : Flow<String?> {
         return backpackingBuddyRepo.getNameFromID(trip_id)
     }
 
@@ -100,11 +103,11 @@ class BackpackingBuddyViewModel(private val backpackingBuddyRepo : BackpackingBu
         }
     }
 
-    fun getTripDates(tripId: UUID): Flow<TripDates> {
+    fun getTripDates(tripId: UUID): Flow<TripDates?> {
         return backpackingBuddyRepo.getTripDates(tripId)
     }
 
-    fun getAllTrips(): Flow<List<Trips>> = backpackingBuddyRepo.getAllTrips()
+    fun getAllTrips(): Flow<List<Trips?>> = backpackingBuddyRepo.getAllTrips()
 
     fun addTrailToTrip(trail: Trail, tripId: UUID) {
         viewModelScope.launch {
@@ -118,10 +121,10 @@ class BackpackingBuddyViewModel(private val backpackingBuddyRepo : BackpackingBu
         }
     }
 
-    fun getTrailsForTrip(tripId: UUID): Flow<List<Trail>> =
+    fun getTrailsForTrip(tripId: UUID): Flow<List<Trail?>> =
         backpackingBuddyRepo.getTrailsForTrip(tripId)
 
-    fun getCampsitesForTrip(tripId: UUID): Flow<List<Campsite>> {
+    fun getCampsitesForTrip(tripId: UUID): Flow<List<Campsite?>> {
         return backpackingBuddyRepo.getCampsitesForTrip(tripId)
     }
 
@@ -289,12 +292,18 @@ class BackpackingBuddyViewModel(private val backpackingBuddyRepo : BackpackingBu
         private set
 
     fun loadTrails(lat: Double, lon: Double) {
-        val boundLat: Double = lat + 2.0
-        val boundLon: Double = lon + 1.0
+        val deltaLat = 1.0
+        val deltaLon = deltaLat / cos(toRadians(lat))
+
+        val minLat = lat - deltaLat
+        val maxLat = lat + deltaLat
+        val minLon = lon - deltaLon
+        val maxLon = lon + deltaLon
+
         val query = """
         [out:json][timeout:180];
         (
-          way["highway"="path"]["sac_scale"="hiking"]($lat,$lon,$boundLat,$boundLon);
+          way["highway"="path"]["sac_scale"="hiking"]($minLat,$minLon,$maxLat,$maxLon);
           node(w);
         );
         out body;

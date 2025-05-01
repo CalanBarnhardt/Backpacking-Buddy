@@ -56,7 +56,7 @@ fun ExisitngTripItinerary (
     onOverviewClick: () -> Unit,
     onExploreClick: () -> Unit ) {
     val cameraPosition = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(LatLng(38.1, -104.1), 12f)
+        position = CameraPosition.fromLatLngZoom(LatLng(39.7555, -105.2211), 12f)
     }
 
     val tripName = tripId?.let { viewModel.getNameFromID(it).collectAsState(initial = "") }
@@ -147,11 +147,11 @@ fun ExisitngTripItinerary (
 
             // create a map to associate trips and trails
             val campsiteMap: Map<String, List<Campsite>> = dates.associateWith { date ->
-                campsites?.value?.filter { it.date == date } ?: emptyList()
+                (campsites?.value?.filter { it?.date == date } ?: emptyList()) as List<Campsite>
             }
 
             val trailsMap: Map<String, List<Trail>> = dates.associateWith { date ->
-                trails?.value?.filter { it.date == date } ?: emptyList()
+                (trails?.value?.filter { it?.date == date } ?: emptyList()) as List<Trail>
             }
 
             LazyColumn(
