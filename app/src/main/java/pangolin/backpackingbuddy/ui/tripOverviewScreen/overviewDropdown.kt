@@ -10,11 +10,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,9 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import pangolin.backpackingbuddy.data.dataEntries.Campsite
 import pangolin.backpackingbuddy.data.dataEntries.Trail
-import pangolin.backpackingbuddy.ui.navigation.specs.ProfileScreenSpec
 import pangolin.backpackingbuddy.ui.sharedComponents.BulletPoint
-import pangolin.backpackingbuddy.ui.sharedComponents.ExpandableIcon
 
 @Composable
 fun OverviewDropdown(

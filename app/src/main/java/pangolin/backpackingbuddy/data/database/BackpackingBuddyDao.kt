@@ -108,18 +108,11 @@ interface BackpackingBuddyDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertCampsite(campsite: Campsite)
 
-    // TODO: delete a trip
-
-    // TODO : delete reference to a trip (while trip is deleted)
-
     @Query("UPDATE campsites SET date = :date WHERE campsite_id = :campsiteId")
     suspend fun updateCampsiteDate(campsiteId: UUID, date: String)
 
     @Query("UPDATE trails SET date = :date WHERE trail_id = :trailId")
     suspend fun updateTrailDate(trailId: UUID, date: String)
-
-
-
 
 }
 

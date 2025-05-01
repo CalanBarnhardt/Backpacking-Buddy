@@ -4,11 +4,9 @@ import BackpackingBuddyRepo
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -26,10 +24,7 @@ import pangolin.backpackingbuddy.data.dataEntries.Trips
 import pangolin.backpackingbuddy.data.database.TripDates
 import pangolin.backpackingbuddy.data.network.RetrofitClient
 import java.lang.Math.toRadians
-import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
-import java.util.Locale
 import java.util.UUID
 import kotlin.math.cos
 
@@ -40,6 +35,7 @@ class BackpackingBuddyViewModel(private val backpackingBuddyRepo : BackpackingBu
     companion object {
         private const val LOG_TAG = "448.BackpackingBuddyViewModel"
     }
+
     // ===================================================================================================================
     // STATE FLOWS
     // ===================================================================================================================
@@ -50,7 +46,6 @@ class BackpackingBuddyViewModel(private val backpackingBuddyRepo : BackpackingBu
     // ===================================================================================================================
     // DATABASE RETRIEVAL OPERATIONS
     // ===================================================================================================================
-    // TODO: retrieve all the trips listed under the user to be observed by the profile screen so a button can display per
 
     // retrieves trip names for profile screen
     fun retrieveNames () : Flow<List<String?>> {
@@ -127,25 +122,6 @@ class BackpackingBuddyViewModel(private val backpackingBuddyRepo : BackpackingBu
     fun getCampsitesForTrip(tripId: UUID): Flow<List<Campsite?>> {
         return backpackingBuddyRepo.getCampsitesForTrip(tripId)
     }
-
-//    fun convertToDateList(tripId: UUID): List<String> {
-//
-//        val tripDates = getTripDates(tripId)
-//
-//        val (start, end) = tripDates.value.range
-//        val dateFormatter =  SimpleDateFormat("MM/dd", Locale.getDefault())
-//
-//        val list = mutableListOf<String>()
-//        val calendar = Calendar.getInstance().apply { time = start }
-//        val endCalendar = Calendar.getInstance().apply { time = end }
-//
-//        while (!calendar.after(endCalendar)) {
-//            list.add(dateFormatter.format(calendar.time))
-//            calendar.add(Calendar.DATE, 1)
-//        }
-//
-//        return list
-//    }
 
     //====================================================================================================================
     // SIGNUP SCREEN OPERATIONS
@@ -281,6 +257,8 @@ class BackpackingBuddyViewModel(private val backpackingBuddyRepo : BackpackingBu
         }
         return "No user"
     }
+
+    // query stuff
 
     var trailData by mutableStateOf<List<Element>>(emptyList())
         private set

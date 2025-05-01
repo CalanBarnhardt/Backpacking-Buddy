@@ -20,7 +20,6 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -37,21 +36,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.selects.select
 import pangolin.backpackingbuddy.R
 import pangolin.backpackingbuddy.data.dataEntries.Campsite
 import pangolin.backpackingbuddy.data.dataEntries.Trail
-import pangolin.backpackingbuddy.data.database.TripDates
-import pangolin.backpackingbuddy.ui.sharedComponents.AddButtonIcon
 import pangolin.backpackingbuddy.ui.sharedComponents.NavButton
 import pangolin.backpackingbuddy.ui.sharedComponents.TripNameDisplay
-import pangolin.backpackingbuddy.ui.theme.DarkForestGreen
 import pangolin.backpackingbuddy.viewmodel.BackpackingBuddyViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 import java.util.UUID
+
 @Composable
 fun ExistingTripOverviewScreen(
     viewModel: BackpackingBuddyViewModel,

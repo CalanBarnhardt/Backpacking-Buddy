@@ -62,19 +62,19 @@ fun ProfileScreen(viewModel: BackpackingBuddyViewModel, onCreateTrip: () -> Unit
             )
             Spacer(modifier = Modifier.width(8.dp))
             BoxWithConstraints(
-                modifier = Modifier.weight(1f) // Take available space, leaving room for the button
+                modifier = Modifier.weight(1f)
             ) {
                 val fontSize = when {
-                    maxWidth < 150.dp -> 16.sp // Smaller font for tight space
-                    maxWidth < 200.dp -> 18.sp // Medium font for moderate space
-                    else -> 20.sp // Default font size
+                    maxWidth < 150.dp -> 16.sp
+                    maxWidth < 200.dp -> 18.sp
+                    else -> 20.sp
                 }
                 Text(
                     text = viewModel.getCurrentEmail(),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis, // Show ellipsis if text is too long
+                    overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.align(Alignment.CenterStart)
                 )
             }
@@ -109,8 +109,6 @@ fun ProfileScreen(viewModel: BackpackingBuddyViewModel, onCreateTrip: () -> Unit
         Divider(modifier = Modifier.fillMaxWidth(0.7f))
 
         Spacer(modifier = Modifier.height(16.dp))
-
-        // displays a button for each existing trip
 
         // retrieves list of trip names
         val tripList by viewModel.retrieveNames().collectAsState(initial = emptyList())
